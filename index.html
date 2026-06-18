@@ -453,7 +453,7 @@ var lg=JSON.parse(localStorage.getItem(SKL)||'[]');
 var isAdm=false,curAngId=null;
 var fbReady=false;
 
-function gpin(){return localStorage.getItem(SKP)||'1234'}
+function gpin(){return localStorage.getItem(SKP)||'1234'} // PIN also synced via Firebase
 function sv(){
   localStorage.setItem(SKA,JSON.stringify(ang));
   localStorage.setItem(SKL,JSON.stringify(lg));
@@ -808,6 +808,7 @@ function changePin(){
   if(!/^\d{4}$/.test(n)){toast('PIN-ul trebuie sa aiba exact 4 cifre.');return}
   if(n!==c){toast('PIN-urile nu coincid.');return}
   localStorage.setItem(SKP,n);
+  if(window.fbdb) window.fbdb.ref('pontaj/pin').set(n);
   document.getElementById('pnew').value=''; document.getElementById('pconf').value='';
   toast('PIN schimbat cu succes!');
 }
@@ -857,6 +858,13 @@ window.addEventListener('load', function(){
       if(fbReady){renderP();if(isAdm){renderL();}}
     }
     if(!fbReady){fbReady=true;initApp();}
+  });
+  // Sync PIN from Firebase
+  db.ref('pontaj/pin').on('value',function(snap){
+    var p=snap.val();
+    if(p&&typeof p==='string'&&/^\d{4}$/.test(p)){
+      localStorage.setItem(SKP,p);
+    }
   });
   // Fallback: if Firebase takes too long, init anyway
   setTimeout(function(){if(!fbReady){fbReady=true;initApp();}},3000);
