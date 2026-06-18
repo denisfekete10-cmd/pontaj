@@ -186,16 +186,16 @@ function empPk(k){
   empPinInput+=k;renderEmpDots();
   if(empPinInput.length===4){
     var a=ang.find(function(x){return x.id===pendingPontajId});
-    if(a&&a.pin===empPinInput){closeEmpPin();setTimeout(function(){startPontaj(pendingPontajId);},100);}
+    if(a&&a.pin===empPinInput){var sid=pendingPontajId;closeEmpPin();setTimeout(function(){startPontaj(sid);},100);}
     else{document.querySelectorAll('#empPinDots .pindot').forEach(function(d){d.classList.add('e');});document.getElementById('empPinErr').textContent='PIN incorect.';setTimeout(function(){empPinInput='';renderEmpDots();document.getElementById('empPinErr').textContent='';},800);}
   }
 }
 function empPb(){if(empPinInput.length>0){empPinInput=empPinInput.slice(0,-1);renderEmpDots();}}
 function closeEmpPin(){document.getElementById('empPinModal').classList.remove('open');pendingPontajId=null;}
 var editingPinId=null;
-function openEditPin(id){editingPinId=id;var a=ang.find(function(x){return x.id===id});document.getElementById('editPinAngName').textContent='PIN: '+a.name;document.getElementById('editPinVal').value='';document.getElementById('editPinErr').textContent='';document.getElementById('editPinModal').classList.add('open');}
+function openEditPin(id){var a=ang.find(function(x){return x.id===id});if(!a){toast('Angajat negasit, reincarca pagina.');return;}editingPinId=id;document.getElementById('editPinAngName').textContent='PIN: '+a.name;document.getElementById('editPinVal').value='';document.getElementById('editPinErr').textContent='';document.getElementById('editPinModal').classList.add('open');}
 function closeEditPinDirect(){document.getElementById('editPinModal').classList.remove('open');editingPinId=null;}
-function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();if(!/^\d{4}$/.test(p)){document.getElementById('editPinErr').textContent='PIN: 4 cifre.';return;}var i=ang.findIndex(function(x){return x.id===editingPinId});if(i<0)return;ang[i].pin=p;sv();renderA();toast('PIN actualizat: '+ang[i].name);closeEditPinDirect();}
+function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();if(!/^\d{4}$/.test(p)){document.getElementById('editPinErr').textContent='PIN: 4 cifre.';return;}var i=ang.findIndex(function(x){return x.id===editingPinId});if(i<0){toast('Angajat negasit.');closeEditPinDirect();return;}var empName=ang[i].name;ang[i].pin=p;sv();renderA();toast('PIN actualizat: '+empName);closeEditPinDirect();}
 
 </script>
 </head>
@@ -828,40 +828,38 @@ document.getElementById('nname').addEventListener('keydown',function(e){if(e.key
 updDate(); setInterval(updDate,60000);
 
 // Start Firebase sync after page loaded
+// Start app immediately with localStorage data
+fbReady=true;
+initApp();
+
+// Then sync Firebase in background
 window.addEventListener('load', function(){
-  var db=firebase.database();
-  window.fbdb=db;
-  var loadedCount=0;
-  function onFbLoaded(){
-    loadedCount++;
-    if(loadedCount>=2&&!fbReady){fbReady=true;initApp();}
-  }
-  db.ref('pontaj/angajati').on('value',function(snap){
-    var data=snap.val();
-    if(data&&Array.isArray(data)){
-      ang=data;
-      localStorage.setItem(SKA,JSON.stringify(ang));
-      if(fbReady){renderP();if(isAdm){popSel();renderA();}}
-    }
-    onFbLoaded();
-  });
-  db.ref('pontaj/log').on('value',function(snap){
-    var data=snap.val();
-    if(data&&Array.isArray(data)){
-      lg=data;
-      localStorage.setItem(SKL,JSON.stringify(lg));
-      if(fbReady){renderP();if(isAdm){renderL();}}
-    }
-    onFbLoaded();
-  });
-  db.ref('pontaj/pin').on('value',function(snap){
-    var p=snap.val();
-    if(p&&typeof p==='string'&&/^\d{4}$/.test(p)){
-      localStorage.setItem(SKP,p);
-    }
-  });
-  // Fallback: if Firebase takes too long
-  setTimeout(function(){if(!fbReady){fbReady=true;initApp();}},1000);
+  try {
+    var db=firebase.database();
+    window.fbdb=db;
+    db.ref('pontaj/angajati').on('value',function(snap){
+      var data=snap.val();
+      if(data&&Array.isArray(data)){
+        ang=data;
+        localStorage.setItem(SKA,JSON.stringify(ang));
+        renderP();if(isAdm){popSel();renderA();}
+      }
+    });
+    db.ref('pontaj/log').on('value',function(snap){
+      var data=snap.val();
+      if(data&&Array.isArray(data)){
+        lg=data;
+        localStorage.setItem(SKL,JSON.stringify(lg));
+        renderP();if(isAdm){renderL();}
+      }
+    });
+    db.ref('pontaj/pin').on('value',function(snap){
+      var p=snap.val();
+      if(p&&typeof p==='string'&&/^\d{4}$/.test(p)){
+        localStorage.setItem(SKP,p);
+      }
+    });
+  } catch(e){console.log('Firebase error:',e);}
 });
 
 /* ===== SCROLL WHEEL TIME PICKER ===== */
@@ -1220,5 +1218,6 @@ document.addEventListener('click',function(e){
 /* URL auth removed */
 
 function initApp(){showA();}
-
->
+</script>
+</body>
+</html>
