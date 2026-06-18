@@ -192,7 +192,12 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 </header>
 <div class="main">
   <!-- ANGAJAT VIEW -->
-  <div id="va">
+  <!-- Loading screen -->
+  <div id="vloading" style="text-align:center;padding:4rem 1rem">
+    <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text3);font-style:italic">Se incarca...</div>
+  </div>
+
+  <div id="va" style="display:none">
     <div class="agrid" id="agrid"></div>
     <div class="alinkw"><button class="alink" onclick="showPin()">admin</button></div>
   </div>
@@ -483,6 +488,7 @@ function showA(){
   isAdm=false; pin=''; renderP();
 }
 function showPin(){
+  document.getElementById('vloading').style.display='none';
   document.getElementById('va').style.display='none';
   document.getElementById('vp').style.display='';
   document.getElementById('vadmin').style.display='none';
@@ -871,7 +877,7 @@ window.addEventListener('load', function(){
     }
   });
   // Fallback: if Firebase takes too long
-  setTimeout(function(){if(!fbReady){fbReady=true;initApp();}},4000);
+  setTimeout(function(){if(!fbReady){fbReady=true;initApp();}},2000);
 });
 
 /* ===== SCROLL WHEEL TIME PICKER ===== */
@@ -1272,6 +1278,7 @@ function initApp(){
 }
 
 function showAngajatSingle(angId){
+  document.getElementById('vloading').style.display='none';
   document.getElementById('va').style.display='';
   document.getElementById('vp').style.display='none';
   document.getElementById('vadmin').style.display='none';
