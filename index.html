@@ -163,6 +163,24 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 .cdp-day.today{border:.5px solid var(--border-strong)}
 .cdp-dow{font-size:11px;color:var(--text3);padding:3px 0;font-family:'Playfair Display',serif;letter-spacing:.04em}
 </style>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyChZkGsouLB968Z3NGrNZ9qvM4mcQK3c1I",
+    authDomain: "pontaj-mille.firebaseapp.com",
+    databaseURL: "https://pontaj-mille-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "pontaj-mille",
+    storageBucket: "pontaj-mille.firebasestorage.app",
+    messagingSenderId: "963318307013",
+    appId: "1:963318307013:web:b3ece8e7849e24f078b8ac"
+  };
+  firebase.initializeApp(firebaseConfig);
+  var db = firebase.database();
+</script>
 </head>
 <body>
 <header>
@@ -434,9 +452,35 @@ var SKA='ms_ang',SKL='ms_log2',SKP='ms_pin';
 var ang=JSON.parse(localStorage.getItem(SKA)||'[]');
 var lg=JSON.parse(localStorage.getItem(SKL)||'[]');
 var isAdm=false,curAngId=null;
+var fbReady=false;
+
+// Sync from Firebase - realtime listener
+db.ref('pontaj/angajati').on('value',function(snap){
+  var data=snap.val();
+  if(data&&Array.isArray(data)){
+    ang=data;
+    localStorage.setItem(SKA,JSON.stringify(ang));
+    if(fbReady){renderP();if(isAdm){popSel();renderA();}}
+  }
+});
+db.ref('pontaj/log').on('value',function(snap){
+  var data=snap.val();
+  if(data&&Array.isArray(data)){
+    lg=data;
+    localStorage.setItem(SKL,JSON.stringify(lg));
+    if(fbReady){renderP();if(isAdm){renderL();}}
+  }
+  if(!fbReady){fbReady=true;initApp();}
+});
 
 function gpin(){return localStorage.getItem(SKP)||'1234'}
-function sv(){localStorage.setItem(SKA,JSON.stringify(ang));localStorage.setItem(SKL,JSON.stringify(lg))}
+function sv(){
+  localStorage.setItem(SKA,JSON.stringify(ang));
+  localStorage.setItem(SKL,JSON.stringify(lg));
+  // sync to Firebase
+  db.ref('pontaj/angajati').set(ang);
+  db.ref('pontaj/log').set(lg);
+}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function ini(n){return n.trim().split(/\s+/).map(function(w){return w[0]}).join('').toUpperCase().slice(0,2)}
 function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -809,7 +853,7 @@ document.getElementById('lfd').addEventListener('change',renderL);
 document.getElementById('nname').addEventListener('keydown',function(e){if(e.key==='Enter')addA()});
 
 
-updDate(); setInterval(updDate,60000); initApp();
+updDate(); setInterval(updDate,60000);
 
 /* ===== SCROLL WHEEL TIME PICKER ===== */
 var swState={start:{h:null,m:null},end:{h:null,m:null},estart:{h:null,m:null},eend:{h:null,m:null}};
