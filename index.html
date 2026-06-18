@@ -840,8 +840,12 @@ updDate(); setInterval(updDate,60000);
 // Start Firebase sync after page loaded
 window.addEventListener('load', function(){
   var db=firebase.database();
-  // expose db globally
   window.fbdb=db;
+  var loadedCount=0;
+  function onFbLoaded(){
+    loadedCount++;
+    if(loadedCount>=2&&!fbReady){fbReady=true;initApp();}
+  }
   db.ref('pontaj/angajati').on('value',function(snap){
     var data=snap.val();
     if(data&&Array.isArray(data)){
@@ -849,6 +853,7 @@ window.addEventListener('load', function(){
       localStorage.setItem(SKA,JSON.stringify(ang));
       if(fbReady){renderP();if(isAdm){popSel();renderA();}}
     }
+    onFbLoaded();
   });
   db.ref('pontaj/log').on('value',function(snap){
     var data=snap.val();
@@ -857,17 +862,16 @@ window.addEventListener('load', function(){
       localStorage.setItem(SKL,JSON.stringify(lg));
       if(fbReady){renderP();if(isAdm){renderL();}}
     }
-    if(!fbReady){fbReady=true;initApp();}
+    onFbLoaded();
   });
-  // Sync PIN from Firebase
   db.ref('pontaj/pin').on('value',function(snap){
     var p=snap.val();
     if(p&&typeof p==='string'&&/^\d{4}$/.test(p)){
       localStorage.setItem(SKP,p);
     }
   });
-  // Fallback: if Firebase takes too long, init anyway
-  setTimeout(function(){if(!fbReady){fbReady=true;initApp();}},3000);
+  // Fallback: if Firebase takes too long
+  setTimeout(function(){if(!fbReady){fbReady=true;initApp();}},4000);
 });
 
 /* ===== SCROLL WHEEL TIME PICKER ===== */
@@ -1254,13 +1258,15 @@ function initApp(){
     body.innerHTML='<div style="text-align:center;padding:4rem 1rem"><div style="font-family:Playfair Display,serif;font-size:22px;color:var(--danger);margin-bottom:1rem">Acces interzis</div><div style="color:var(--text2);font-size:15px">Link invalid. Foloseste tag-ul NFC personal.</div></div>';
     return;
   }
-  // Valid employee URL
+  // Valid employee URL - use URL params directly, no Firebase lookup needed
+  var urlName=getParam('n')||'Angajat';
   var a=ang.find(function(x){return x.id===URL_ANG_ID});
   if(!a){
-    // Employee not in local storage (different device) - create entry from URL params
-    var urlName=getParam('n')||'Angajat';
     a={id:URL_ANG_ID,name:decodeURIComponent(urlName),key:URL_KEY};
-    ang.push(a); sv();
+    ang.push(a);
+    localStorage.setItem(SKA,JSON.stringify(ang));
+    // sync to Firebase without overwriting other employees
+    if(window.fbdb) window.fbdb.ref('pontaj/angajati').set(ang);
   }
   showAngajatSingle(a.id);
 }
