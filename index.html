@@ -473,7 +473,7 @@ function showAdm(){
 }
 function logout(){
   if(URL_ANG_ID&&URL_KEY){showAngajatSingle(URL_ANG_ID);}
-  else{showA();}
+  else{showPin();}
 }
 
 /* PIN */
@@ -1182,8 +1182,13 @@ function checkAccess(){
 }
 
 function initApp(){
+  // No params = go to PIN/admin only, never show employee list publicly
+  if(!URL_ANG_ID&&!URL_KEY){
+    showPin();
+    return;
+  }
+  // Has params but invalid key
   if(!checkAccess()){
-    // Show access denied screen
     document.getElementById('va').style.display='none';
     document.getElementById('vp').style.display='none';
     document.getElementById('vadmin').style.display='none';
@@ -1191,16 +1196,10 @@ function initApp(){
     body.innerHTML='<div style="text-align:center;padding:4rem 1rem"><div style="font-family:Playfair Display,serif;font-size:22px;color:var(--danger);margin-bottom:1rem">Acces interzis</div><div style="color:var(--text2);font-size:15px">Link invalid. Foloseste tag-ul NFC personal.</div></div>';
     return;
   }
-  // If URL has angajat params, go straight to their pontaj screen
-  if(URL_ANG_ID&&URL_KEY){
-    var a=ang.find(function(x){return x.id===URL_ANG_ID});
-    if(a){
-      // Hide admin link, show only this employee
-      showAngajatSingle(a.id);
-      return;
-    }
-  }
-  showA();
+  // Valid employee URL
+  var a=ang.find(function(x){return x.id===URL_ANG_ID});
+  if(a){showAngajatSingle(a.id);}
+  else{showPin();}
 }
 
 function showAngajatSingle(angId){
