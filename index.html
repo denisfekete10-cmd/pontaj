@@ -615,7 +615,7 @@ function renderA(){
   var base=window.location.href.split('?')[0];
   ang.forEach(function(a){
     if(!a.key){a.key=genKey();sv();}
-    var url=base+'?a='+a.id+'&k='+a.key;
+    var url=base+'?a='+a.id+'&k='+a.key+'&n='+encodeURIComponent(a.name);
     var item=document.createElement('div');item.className='aitem';item.style.flexDirection='column';item.style.alignItems='stretch';item.style.gap='8px';
     // top row: avatar + name + delete
     var top=document.createElement('div');top.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px';
@@ -1173,11 +1173,10 @@ var URL_ANG_ID=getParam('a');
 var URL_KEY=getParam('k');
 
 function checkAccess(){
-  // If no params = admin mode (shows PIN screen path via normal flow)
   if(!URL_ANG_ID&&!URL_KEY) return true;
-  // If params present, validate key
-  var a=ang.find(function(x){return x.id===URL_ANG_ID});
-  if(a&&a.key&&a.key===URL_KEY) return true;
+  // Key in URL is sufficient auth - no localStorage lookup needed
+  // (localStorage may be empty on other devices)
+  if(URL_ANG_ID&&URL_KEY&&URL_KEY.length>=6) return true;
   return false;
 }
 
@@ -1198,8 +1197,13 @@ function initApp(){
   }
   // Valid employee URL
   var a=ang.find(function(x){return x.id===URL_ANG_ID});
-  if(a){showAngajatSingle(a.id);}
-  else{showPin();}
+  if(!a){
+    // Employee not in local storage (different device) - create entry from URL params
+    var urlName=getParam('n')||'Angajat';
+    a={id:URL_ANG_ID,name:decodeURIComponent(urlName),key:URL_KEY};
+    ang.push(a); sv();
+  }
+  showAngajatSingle(a.id);
 }
 
 function showAngajatSingle(angId){
