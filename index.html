@@ -839,19 +839,15 @@ window.addEventListener('load', function(){
     window.fbdb=db;
     db.ref('pontaj/angajati').on('value',function(snap){
       var data=snap.val();
-      if(data&&Array.isArray(data)){
-        ang=data;
-        localStorage.setItem(SKA,JSON.stringify(ang));
-        renderP();if(isAdm){popSel();renderA();}
-      }
+      ang=(data&&Array.isArray(data))?data:[];
+      localStorage.setItem(SKA,JSON.stringify(ang));
+      renderP();if(isAdm){popSel();renderA();}
     });
     db.ref('pontaj/log').on('value',function(snap){
       var data=snap.val();
-      if(data&&Array.isArray(data)){
-        lg=data;
-        localStorage.setItem(SKL,JSON.stringify(lg));
-        renderP();if(isAdm){renderL();}
-      }
+      lg=(data&&Array.isArray(data))?data:[];
+      localStorage.setItem(SKL,JSON.stringify(lg));
+      renderP();if(isAdm){renderL();}
     });
     db.ref('pontaj/pin').on('value',function(snap){
       var p=snap.val();
