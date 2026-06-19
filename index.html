@@ -8,15 +8,15 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --gold:#c8a96e;--gold-dim:#8a6e3e;
-  --bg:#0f0d0b;--bg2:#1a1612;--bg3:#241f19;
-  --border:rgba(200,169,110,0.18);--border-strong:rgba(200,169,110,0.35);
-  --text:#f0e8d8;--text2:#a89070;--text3:#6a5a44;
-  --radius:12px;--success:#4caf82;--danger:#e05555;--warning:#e0a855;
+  --gold:#8a6420;--gold-dim:#6b4d18;
+  --bg:#d9cfb8;--bg2:#e6dcc4;--bg3:#cfc2a4;
+  --border:rgba(120,90,30,0.28);--border-strong:rgba(120,90,30,0.48);
+  --text:#332a1f;--text2:#5a4a36;--text3:#7a6848;
+  --radius:12px;--success:#2d7d4f;--danger:#c4392b;--warning:#b8761f;
 }
-body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;font-size:16px;min-height:100vh}
+body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;font-size:18px;min-height:100vh}
 header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);padding:1rem 1.25rem .85rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.htitle{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);letter-spacing:.04em}
+.htitle{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);letter-spacing:.04em}
 .hright{display:flex;align-items:center;gap:10px}
 .hdate{font-size:13px;color:var(--text2);font-style:italic}
 .abadge{background:rgba(200,169,110,.12);border:.5px solid var(--border-strong);border-radius:6px;padding:3px 10px;font-size:12px;color:var(--gold)}
@@ -26,13 +26,13 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 
 /* Angajat cards */
 .agrid{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem}
-.acard{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;transition:border-color .18s,background .18s}
+.acard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;transition:border-color .18s,background .18s;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
 .acard:hover{border-color:var(--border-strong);background:rgba(255,255,255,.02)}
 .acard.has-entry{border-color:var(--success)}
 .ainfo{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
-.av{width:42px;height:42px;border-radius:50%;background:var(--bg3);border:.5px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;color:var(--gold);flex-shrink:0}
-.aname{font-size:17px;font-weight:500;color:var(--text)}
-.astatus{font-size:12px;color:var(--text3);margin-top:3px;font-style:italic}
+.av{width:52px;height:52px;border-radius:50%;background:var(--bg3);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);font-weight:600;flex-shrink:0}
+.aname{font-size:24px;font-weight:600;color:var(--text)}
+.astatus{font-size:18px;color:var(--text3);margin-top:4px;font-style:italic}
 .astatus.done{color:var(--success)}
 .astatus.partial{color:var(--warning)}
 .achevron{color:var(--text3);font-size:18px;line-height:1}
@@ -83,7 +83,7 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 .pindot.f{background:var(--gold);border-color:var(--gold)}
 .pindot.e{background:var(--danger);border-color:var(--danger)}
 .pingrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:240px;margin:0 auto}
-.pkey{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--radius);padding:16px 0;font-family:'Playfair Display',serif;font-size:20px;color:var(--text);cursor:pointer;transition:background .12s;user-select:none}
+.pkey{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px 0;font-family:'Playfair Display',serif;font-size:24px;color:var(--text);cursor:pointer;transition:background .12s;user-select:none}
 .pkey:hover{background:var(--bg3);border-color:var(--border-strong)}
 .pkey:active{transform:scale(.95)}
 .pdel{font-size:16px;color:var(--text3);font-family:'EB Garamond',serif}
