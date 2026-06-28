@@ -8,15 +8,15 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --gold:#8a6420;--gold-dim:#6b4d18;
-  --bg:#d9cfb8;--bg2:#e6dcc4;--bg3:#cfc2a4;
-  --border:rgba(120,90,30,0.28);--border-strong:rgba(120,90,30,0.48);
-  --text:#332a1f;--text2:#5a4a36;--text3:#7a6848;
-  --radius:12px;--success:#2d7d4f;--danger:#c4392b;--warning:#b8761f;
+  --gold:#c8a96e;--gold-dim:#8a6e3e;
+  --bg:#0f0d0b;--bg2:#1a1612;--bg3:#241f19;
+  --border:rgba(200,169,110,0.18);--border-strong:rgba(200,169,110,0.35);
+  --text:#f0e8d8;--text2:#a89070;--text3:#6a5a44;
+  --radius:12px;--success:#4caf82;--danger:#e05555;--warning:#e0a855;
 }
-body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;font-size:18px;min-height:100vh}
+body{background:var(--bg);color:var(--text);font-family:'EB Garamond',Georgia,serif;font-size:16px;min-height:100vh}
 header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);padding:1rem 1.25rem .85rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.htitle{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);letter-spacing:.04em}
+.htitle{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);letter-spacing:.04em}
 .hright{display:flex;align-items:center;gap:10px}
 .hdate{font-size:13px;color:var(--text2);font-style:italic}
 .abadge{background:rgba(200,169,110,.12);border:.5px solid var(--border-strong);border-radius:6px;padding:3px 10px;font-size:12px;color:var(--gold)}
@@ -26,13 +26,13 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 
 /* Angajat cards */
 .agrid{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem}
-.acard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;transition:border-color .18s,background .18s;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.acard{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;transition:border-color .18s,background .18s}
 .acard:hover{border-color:var(--border-strong);background:rgba(255,255,255,.02)}
 .acard.has-entry{border-color:var(--success)}
 .ainfo{display:flex;align-items:center;gap:12px;flex:1;min-width:0}
-.av{width:52px;height:52px;border-radius:50%;background:var(--bg3);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:17px;color:var(--gold);font-weight:600;flex-shrink:0}
-.aname{font-size:24px;font-weight:600;color:var(--text)}
-.astatus{font-size:18px;color:var(--text3);margin-top:4px;font-style:italic}
+.av{width:42px;height:42px;border-radius:50%;background:var(--bg3);border:.5px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:14px;color:var(--gold);flex-shrink:0}
+.aname{font-size:17px;font-weight:500;color:var(--text)}
+.astatus{font-size:12px;color:var(--text3);margin-top:3px;font-style:italic}
 .astatus.done{color:var(--success)}
 .astatus.partial{color:var(--warning)}
 .achevron{color:var(--text3);font-size:18px;line-height:1}
@@ -83,7 +83,7 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 .pindot.f{background:var(--gold);border-color:var(--gold)}
 .pindot.e{background:var(--danger);border-color:var(--danger)}
 .pingrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:240px;margin:0 auto}
-.pkey{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px 0;font-family:'Playfair Display',serif;font-size:24px;color:var(--text);cursor:pointer;transition:background .12s;user-select:none}
+.pkey{background:var(--bg2);border:.5px solid var(--border);border-radius:var(--radius);padding:16px 0;font-family:'Playfair Display',serif;font-size:20px;color:var(--text);cursor:pointer;transition:background .12s;user-select:none}
 .pkey:hover{background:var(--bg3);border-color:var(--border-strong)}
 .pkey:active{transform:scale(.95)}
 .pdel{font-size:16px;color:var(--text3);font-family:'EB Garamond',serif}
@@ -136,6 +136,18 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 .sw-display.set{color:var(--gold)}
 .sw-display.open{border-color:var(--gold);border-bottom-left-radius:0;border-bottom-right-radius:0}
 .sw-drums{display:flex;align-items:center;justify-content:center;background:var(--bg3);border:.5px solid var(--gold);border-top:none;border-bottom-left-radius:8px;border-bottom-right-radius:8px;position:relative}
+.sig-block{margin-top:18px}
+.sig-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sig-header label{font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--text2)}
+.sig-clear{background:none;border:none;color:var(--gold);font-size:12px;cursor:pointer;text-decoration:underline;padding:0}
+.sig-canvas{width:100%;height:120px;background:#fff;border:1px solid var(--border-strong);border-radius:8px;touch-action:none;display:block}
+.sig-hint{font-size:11px;color:var(--text3);margin-top:6px;text-align:center}
+.sig-thumb{width:60px;height:28px;object-fit:contain;background:#fff;border:1px solid var(--border-strong);border-radius:4px;cursor:pointer}
+.sig-view-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;align-items:center;justify-content:center}
+.sig-view-overlay.open{display:flex}
+.sig-view-box{background:#fff;border-radius:12px;padding:20px;max-width:90vw}
+.sig-view-box img{max-width:100%;display:block}
+.sig-view-close{display:block;margin:14px auto 0;padding:8px 18px;background:var(--gold);color:#1a1612;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
 .sw-col{flex:1;position:relative;overflow:hidden}
 .sw-sep{color:var(--gold);font-size:22px;padding:0 4px;font-family:'Playfair Display',serif;flex-shrink:0;z-index:3}
 .sw-drum{height:180px;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;cursor:grab}
@@ -167,6 +179,7 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 <!-- Firebase -->
 <script src="https://cdn.jsdelivr.net/npm/firebase@9.23.0/firebase-app-compat.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/firebase@9.23.0/firebase-database-compat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
 
   const firebaseConfig = {
@@ -179,24 +192,6 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
     appId: "1:963318307013:web:b3ece8e7849e24f078b8ac"
   };
   firebase.initializeApp(firebaseConfig);
-var pendingPontajId=null,empPinInput='';
-function renderEmpDots(){var d=document.querySelectorAll('#empPinDots .pindot');d.forEach(function(x,i){x.classList.toggle('f',i<empPinInput.length);x.classList.remove('e');});}
-function empPk(k){
-  if(empPinInput.length>=4)return;
-  empPinInput+=k;renderEmpDots();
-  if(empPinInput.length===4){
-    var a=ang.find(function(x){return x.id===pendingPontajId});
-    if(a&&a.pin===empPinInput){var sid=pendingPontajId;closeEmpPin();setTimeout(function(){startPontaj(sid);},100);}
-    else{document.querySelectorAll('#empPinDots .pindot').forEach(function(d){d.classList.add('e');});document.getElementById('empPinErr').textContent='PIN incorect.';setTimeout(function(){empPinInput='';renderEmpDots();document.getElementById('empPinErr').textContent='';},800);}
-  }
-}
-function empPb(){if(empPinInput.length>0){empPinInput=empPinInput.slice(0,-1);renderEmpDots();}}
-function closeEmpPin(){document.getElementById('empPinModal').classList.remove('open');pendingPontajId=null;}
-var editingPinId=null;
-function openEditPin(id){var a=ang.find(function(x){return x.id===id});if(!a){toast('Angajat negasit, reincarca pagina.');return;}editingPinId=id;document.getElementById('editPinAngName').textContent='PIN: '+a.name;document.getElementById('editPinVal').value='';document.getElementById('editPinErr').textContent='';document.getElementById('editPinModal').classList.add('open');}
-function closeEditPinDirect(){document.getElementById('editPinModal').classList.remove('open');editingPinId=null;}
-function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();if(!/^\d{4}$/.test(p)){document.getElementById('editPinErr').textContent='PIN: 4 cifre.';return;}var i=ang.findIndex(function(x){return x.id===editingPinId});if(i<0){toast('Angajat negasit.');closeEditPinDirect();return;}var empName=ang[i].name;ang[i].pin=p;sv();renderA();toast('PIN actualizat: '+empName);closeEditPinDirect();}
-
 </script>
 </head>
 <body>
@@ -211,7 +206,9 @@ function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();
 <div class="main">
   <!-- ANGAJAT VIEW -->
   <!-- Loading screen -->
-  <div id="vloading" style="display:none"></div>
+  <div id="vloading" style="text-align:center;padding:4rem 1rem">
+    <div style="font-family:'Playfair Display',serif;font-size:16px;color:var(--text3);font-style:italic">Se incarca...</div>
+  </div>
 
   <div id="va" style="display:none">
     <div class="agrid" id="agrid"></div>
@@ -262,7 +259,7 @@ function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();
       </div>
       <div class="lwrap">
         <table class="lt">
-          <thead><tr><th style="width:22%">Angajat</th><th style="width:13%">Data</th><th style="width:13%">Intrare</th><th style="width:13%">Iesire</th><th style="width:13%">Ore</th><th style="width:13%">Edit</th><th style="width:13%">Del</th></tr></thead>
+          <thead><tr><th style="width:18%">Angajat</th><th style="width:11%">Data</th><th style="width:10%">Intrare</th><th style="width:10%">Iesire</th><th style="width:10%">Ore</th><th style="width:13%">Semnatura</th><th style="width:13%">Edit</th><th style="width:13%">Del</th></tr></thead>
           <tbody id="ltbody"></tbody>
         </table>
         <div class="empty" id="lempty" style="display:none">Nicio inregistrare.</div>
@@ -281,11 +278,12 @@ function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();
         </div>
         <button class="ba" style="flex:none" onclick="calcR()">Calculeaza</button>
         <button class="ba" style="flex:none" onclick="expCSV()">CSV</button>
+        <button class="ba" style="flex:none" onclick="expZIP()">ZIP + Semnaturi</button>
       </div>
       <div class="sgrid" id="rsum"></div>
       <div class="lwrap">
         <table class="lt">
-          <thead><tr><th style="width:22%">Angajat</th><th style="width:13%">Data</th><th style="width:13%">Intrare</th><th style="width:13%">Iesire</th><th style="width:13%">Ore</th><th style="width:13%">Edit</th><th style="width:13%">Del</th></tr></thead>
+          <thead><tr><th style="width:18%">Angajat</th><th style="width:11%">Data</th><th style="width:10%">Intrare</th><th style="width:10%">Iesire</th><th style="width:10%">Ore</th><th style="width:13%">Semnatura</th><th style="width:13%">Edit</th><th style="width:13%">Del</th></tr></thead>
           <tbody id="rtbody"></tbody>
         </table>
         <div class="empty" id="rempty">Selecteaza interval si apasa Calculeaza.</div>
@@ -295,7 +293,6 @@ function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();
       <div class="stitle">Adauga angajat</div>
       <div class="addform">
         <input type="text" id="nname" placeholder="Nume angajat..." maxlength="40">
-        <input type="password" id="npin" placeholder="PIN (4 cifre)" maxlength="4" inputmode="numeric" style="width:110px">
         <button class="ba" style="flex:none" onclick="addA()">Adauga</button>
       </div>
       <div class="stitle">Lista</div>
@@ -312,9 +309,18 @@ function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();
       <div class="stitle">Date</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="ba" style="flex:none" onclick="expCSV()">Export CSV complet</button>
+        <button class="ba" style="flex:none" onclick="expZIP()">Export ZIP + Semnaturi</button>
         <button class="ba bdanger" style="flex:none" onclick="confirmClear()">Sterge tot jurnalul</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- SIGNATURE VIEW MODAL -->
+<div class="sig-view-overlay" id="sigViewOverlay" onclick="closeSigView(event)">
+  <div class="sig-view-box">
+    <img id="sigViewImg" src="" alt="Semnatura">
+    <button class="sig-view-close" onclick="closeSigView()">Inchide</button>
   </div>
 </div>
 
@@ -370,6 +376,14 @@ function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();
         <input type="hidden" id="mend">
       </div>
     </div>
+    <div class="sig-block">
+      <div class="sig-header">
+        <label>SEMNATURA</label>
+        <button type="button" class="sig-clear" onclick="clearSignature()">Sterge</button>
+      </div>
+      <canvas id="sigCanvas" class="sig-canvas"></canvas>
+      <div class="sig-hint">Semneaza aici cu degetul, confirmand orele introduse mai sus.</div>
+    </div>
     <div class="mbtns">
       <button class="ba" onclick="closePontajDirect()">Anuleaza</button>
       <button class="ba primary" onclick="savePontaj()">Salveaza tura</button>
@@ -377,24 +391,6 @@ function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();
   </div>
 </div>
 
-<!-- Employee PIN modal -->
-<div class="moverlay" id="empPinModal">
-  <div class="msheet">
-    <div class="msheet-title"><span id="empPinName"></span><button class="mclose" onclick="closeEmpPin()">&#x2715;</button></div>
-    <p style="text-align:center;font-size:13px;color:var(--text2);font-style:italic;margin-bottom:1.5rem">Introdu PIN-ul tau personal</p>
-    <div class="pindots" id="empPinDots" style="justify-content:center;margin-bottom:1.5rem">
-      <div class="pindot"></div><div class="pindot"></div><div class="pindot"></div><div class="pindot"></div>
-    </div>
-    <div class="pingrid" style="max-width:240px;margin:0 auto">
-      <button class="pkey" onclick="empPk(&apos;1&apos;)">1</button><button class="pkey" onclick="empPk(&apos;2&apos;)">2</button><button class="pkey" onclick="empPk(&apos;3&apos;)">3</button>
-      <button class="pkey" onclick="empPk(&apos;4&apos;)">4</button><button class="pkey" onclick="empPk(&apos;5&apos;)">5</button><button class="pkey" onclick="empPk(&apos;6&apos;)">6</button>
-      <button class="pkey" onclick="empPk(&apos;7&apos;)">7</button><button class="pkey" onclick="empPk(&apos;8&apos;)">8</button><button class="pkey" onclick="empPk(&apos;9&apos;)">9</button>
-      <button class="pkey pdel" onclick="empPb()">&#x232b;</button><button class="pkey" onclick="empPk(&apos;0&apos;)">0</button>
-      <button class="pkey pdel" onclick="closeEmpPin()" style="font-size:13px">&#x2715;</button>
-    </div>
-    <div class="perr" id="empPinErr" style="text-align:center;margin-top:1rem"></div>
-  </div>
-</div>
 <!-- EDIT ENTRY MODAL -->
 <div class="moverlay" id="editModal" onclick="closeEditModal(event)">
   <div class="msheet" id="editSheet">
@@ -463,21 +459,6 @@ function saveEditPin(){var p=document.getElementById('editPinVal').value.trim();
   </div>
 </div>
 
-<!-- Edit PIN modal -->
-<div class="moverlay" id="editPinModal" onclick="if(event.target===this)closeEditPinDirect()">
-  <div class="msheet">
-    <div class="msheet-title"><span id="editPinAngName">PIN</span><button class="mclose" onclick="closeEditPinDirect()">&#x2715;</button></div>
-    <div class="merr" id="editPinErr"></div>
-    <div class="date-row" style="margin-bottom:1rem">
-      <label>PIN NOU (4 cifre)</label>
-      <input type="password" inputmode="numeric" maxlength="4" id="editPinVal" style="background:var(--bg3);color:var(--text);border:.5px solid var(--border-strong);border-radius:8px;padding:12px;font-size:28px;letter-spacing:10px;width:100%;text-align:center;margin-top:6px">
-    </div>
-    <div class="mbtns">
-      <button class="ba" onclick="closeEditPinDirect()">Anuleaza</button>
-      <button class="ba primary" onclick="saveEditPin()">Salveaza</button>
-    </div>
-  </div>
-</div>
 <div class="toast" id="toast"></div>
 <div class="cmodal" id="cmodal">
   <div class="cmodalbox">
@@ -552,7 +533,10 @@ function showAdm(){
   document.getElementById('blogt').style.display='';
   isAdm=true; popSel(); renderL(); renderA();
 }
-function logout(){showPin();}
+function logout(){
+  if(URL_ANG_ID&&URL_KEY){showAngajatSingle(URL_ANG_ID);}
+  else{showPin();}
+}
 
 /* PIN */
 var pin='';
@@ -598,52 +582,20 @@ function renderP(){
 
 /* PONTAJ MODAL */
 function openPontaj(id){
+  curAngId=id;
   var a=ang.find(function(x){return x.id===id});
   if(entriesForAng(id,today()).length>0){
     toast(a.name+' a inregistrat deja tura de azi.');return;
   }
-  if(a&&a.pin){
-    pendingPontajId=id;
-    empPinInput='';
-    document.getElementById('empPinName').textContent=a.name;
-    document.getElementById('empPinErr').textContent='';
-    renderEmpDots();
-    document.getElementById('empPinModal').classList.add('open');
-  } else {
-    startPontaj(id);
-  }
-}
-function startPontaj(id){
-  curAngId=id;
-  var a=ang.find(function(x){return x.id===id});
   document.getElementById('modalName').textContent=a.name;
   document.getElementById('merr').textContent='';
   document.getElementById('pontajModal').classList.add('open');
-  requestAnimationFrame(function(){resetClocks();});
+  requestAnimationFrame(function(){resetClocks();if(!sigCtx)initSignaturePad();else resizeSigCanvas();clearSignature();});
 }
 function renderEntriesToday(id,date){}
 
 function closePontaj(ev){if(ev.target===document.getElementById('pontajModal'))closePontajDirect()}
 function closePontajDirect(){document.getElementById('pontajModal').classList.remove('open');curAngId=null}
-function savePontaj(){
-  var date=today();
-  var start=document.getElementById('mstart').value;
-  var end=document.getElementById('mend').value;
-  var err=document.getElementById('merr');
-  if(!start){err.textContent='Selecteaza ora de intrare.';return;}
-  if(!end){err.textContent='Selecteaza si ora de iesire.';return;}
-  if(t2m(end)<=t2m(start)){err.textContent='Ora de iesire trebuie sa fie dupa intrare.';return;}
-  // only one entry per day per employee
-  var existing=entriesForAng(curAngId,date);
-  if(existing.length>0){err.textContent='Ai deja o inregistrare pentru ziua aceasta.';return;}
-  err.textContent='';
-  var entry={uid:uid(),id:curAngId,data:date,start:start,end:end,ts:Date.now()};
-  lg.push(entry);sv();
-  var a=ang.find(function(x){return x.id===curAngId});
-  toast('Salvat \u2014 '+a.name+' '+start+' - '+end);
-  renderP();
-  closePontajDirect();
-}
 function delEntry(uid){
   lg=lg.filter(function(e){return e.uid!==uid}); sv();
   // entry deleted - no need to re-render entries list (feature removed)
@@ -702,43 +654,206 @@ function renderA(){
   if(ang.length===0){
     var d=document.createElement('div');d.className='empty';d.textContent='Niciun angajat.';l.appendChild(d);return;
   }
+  var base=window.location.href.split('?')[0];
   ang.forEach(function(a){
-    var item=document.createElement('div');item.className='aitem';
-    item.style.cssText='flex-direction:column;align-items:stretch;gap:6px';
-    var top=document.createElement('div');
-    top.style.cssText='display:flex;align-items:center;gap:8px';
-    var av=document.createElement('div');av.className='av';
-    av.style.cssText='width:34px;height:34px;font-size:12px;flex-shrink:0';
-    av.textContent=ini(a.name);
-    var nm=document.createElement('span');
-    nm.style.cssText='font-size:15px;color:var(--text);flex:1';
-    nm.textContent=a.name;
+    if(!a.key){a.key=genKey();sv();}
+    var url=base+'?a='+a.id+'&k='+a.key+'&n='+encodeURIComponent(a.name);
+    var item=document.createElement('div');item.className='aitem';item.style.flexDirection='column';item.style.alignItems='stretch';item.style.gap='8px';
+    // top row: avatar + name + delete
+    var top=document.createElement('div');top.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px';
+    var av=document.createElement('div');av.className='av';av.style.cssText='width:34px;height:34px;font-size:12px;flex-shrink:0';av.textContent=ini(a.name);
+    var nm=document.createElement('span');nm.style.cssText='font-size:15px;color:var(--text);flex:1';nm.textContent=a.name;
     var bdel=document.createElement('button');bdel.className='bdel2';bdel.innerHTML='&#215;';
     bdel.dataset.angId=a.id;
     bdel.addEventListener('click',function(){delA(this.dataset.angId);});
     top.appendChild(av);top.appendChild(nm);top.appendChild(bdel);
-    var pinRow=document.createElement('div');
-    pinRow.style.cssText='display:flex;align-items:center;gap:8px;padding-left:42px';
-    var pinLbl=document.createElement('span');
-    pinLbl.style.cssText='font-size:12px;color:var(--text3);font-style:italic;flex:1';
-    pinLbl.textContent='PIN: '+(a.pin?'****':'nesetat');
-    var editPinBtn=document.createElement('button');editPinBtn.className='ba';
-    editPinBtn.style.cssText='padding:3px 10px;font-size:12px';
-    editPinBtn.textContent='Schimba PIN';editPinBtn.dataset.angId=a.id;
-    editPinBtn.addEventListener('click',function(){openEditPin(this.dataset.angId);});
-    pinRow.appendChild(pinLbl);pinRow.appendChild(editPinBtn);
-    item.appendChild(top);item.appendChild(pinRow);l.appendChild(item);
+    // url row
+    var urlRow=document.createElement('div');urlRow.style.cssText='display:flex;align-items:center;gap:6px';
+    var urlDisp=document.createElement('div');
+    urlDisp.style.cssText='font-size:11px;color:var(--text3);background:var(--bg3);border-radius:6px;padding:5px 8px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:monospace';
+    urlDisp.textContent=url;
+    var copyBtn=document.createElement('button');copyBtn.className='ba';copyBtn.style.cssText='flex:none;padding:4px 10px;font-size:12px';
+    copyBtn.textContent='Copy';
+    copyBtn.dataset.url=url;
+    copyBtn.addEventListener('click',function(){
+      navigator.clipboard.writeText(this.dataset.url).then(function(){toast('URL copiat!');});
+    });
+    urlRow.appendChild(urlDisp);urlRow.appendChild(copyBtn);
+    item.appendChild(top);item.appendChild(urlRow);l.appendChild(item);
+  });
+}
+function closePontaj(ev){if(ev.target===document.getElementById('pontajModal'))closePontajDirect()}
+function closePontajDirect(){document.getElementById('pontajModal').classList.remove('open');curAngId=null}
+function savePontaj(){
+  var date=today();
+  var start=document.getElementById('mstart').value;
+  var end=document.getElementById('mend').value;
+  var err=document.getElementById('merr');
+  if(!start){err.textContent='Selecteaza ora de intrare.';return;}
+  if(!end){err.textContent='Selecteaza si ora de iesire.';return;}
+  if(t2m(end)<=t2m(start)){err.textContent='Ora de iesire trebuie sa fie dupa intrare.';return;}
+  if(!sigHasStroke){err.textContent='Semneaza pentru a confirma orele.';return;}
+  // only one entry per day per employee
+  var existing=entriesForAng(curAngId,date);
+  if(existing.length>0){err.textContent='Ai deja o inregistrare pentru ziua aceasta.';return;}
+  err.textContent='';
+  var sigData=sigCanvas?sigCanvas.toDataURL('image/png'):null;
+  var entry={uid:uid(),id:curAngId,data:date,start:start,end:end,ts:Date.now(),sig:sigData};
+  lg.push(entry);sv();
+  var a=ang.find(function(x){return x.id===curAngId});
+  toast('Salvat \u2014 '+a.name+' '+start+' - '+end);
+  renderP();
+  closePontajDirect();
+}
+
+/* ===== SEMNATURA DIGITALA ===== */
+var sigCanvas=null,sigCtx=null,sigDrawing=false,sigHasStroke=false,sigLastX=0,sigLastY=0;
+
+function initSignaturePad(){
+  sigCanvas=document.getElementById('sigCanvas');
+  if(!sigCanvas)return;
+  resizeSigCanvas();
+
+  function getPos(e){
+    var rect=sigCanvas.getBoundingClientRect();
+    var x,y;
+    if(e.touches&&e.touches.length){x=e.touches[0].clientX-rect.left;y=e.touches[0].clientY-rect.top;}
+    else{x=e.clientX-rect.left;y=e.clientY-rect.top;}
+    return {x:x,y:y};
+  }
+  function start(e){
+    sigDrawing=true;
+    var p=getPos(e);
+    sigLastX=p.x;sigLastY=p.y;
+    e.preventDefault();
+  }
+  function move(e){
+    if(!sigDrawing)return;
+    var p=getPos(e);
+    sigCtx.strokeStyle='#1a1612';
+    sigCtx.lineWidth=2;
+    sigCtx.lineCap='round';
+    sigCtx.lineJoin='round';
+    sigCtx.beginPath();
+    sigCtx.moveTo(sigLastX,sigLastY);
+    sigCtx.lineTo(p.x,p.y);
+    sigCtx.stroke();
+    sigLastX=p.x;sigLastY=p.y;
+    sigHasStroke=true;
+    e.preventDefault();
+  }
+  function end(){sigDrawing=false;}
+
+  sigCanvas.addEventListener('mousedown',start);
+  sigCanvas.addEventListener('mousemove',move);
+  sigCanvas.addEventListener('mouseup',end);
+  sigCanvas.addEventListener('mouseleave',end);
+  sigCanvas.addEventListener('touchstart',start,{passive:false});
+  sigCanvas.addEventListener('touchmove',move,{passive:false});
+  sigCanvas.addEventListener('touchend',end,{passive:false});
+}
+
+function resizeSigCanvas(){
+  if(!sigCanvas)return;
+  var rect=sigCanvas.getBoundingClientRect();
+  var ratio=window.devicePixelRatio||1;
+  sigCanvas.width=rect.width*ratio;
+  sigCanvas.height=rect.height*ratio;
+  sigCtx=sigCanvas.getContext('2d');
+  sigCtx.scale(ratio,ratio);
+}
+
+function clearSignature(){
+  if(!sigCtx||!sigCanvas)return;
+  var rect=sigCanvas.getBoundingClientRect();
+  sigCtx.clearRect(0,0,rect.width,rect.height);
+  sigHasStroke=false;
+}
+function viewSig(src){
+  document.getElementById('sigViewImg').src=src;
+  document.getElementById('sigViewOverlay').classList.add('open');
+}
+function closeSigView(ev){
+  if(ev&&ev.target!==document.getElementById('sigViewOverlay'))return;
+  document.getElementById('sigViewOverlay').classList.remove('open');
+}
+function delEntry(uid){
+  lg=lg.filter(function(e){return e.uid!==uid}); sv();
+  // entry deleted - no need to re-render entries list (feature removed)
+  renderP(); if(isAdm)renderL();
+  toast('Inregistrare stearsa.');
+}
+
+/* ADMIN - Log */
+function renderL(){
+  var fa=document.getElementById('lfa').value,fd=document.getElementById('lfd').value;
+  var entries=lg;
+  if(fa)entries=entries.filter(function(e){return e.id===fa});
+  if(fd)entries=entries.filter(function(e){return e.data===fd});
+  entries=entries.slice().sort(function(a,b){return b.ts-a.ts});
+  var tb=document.getElementById('ltbody'),em=document.getElementById('lempty');
+  tb.innerHTML='';
+  if(entries.length===0){em.style.display='';return}
+  em.style.display='none';
+  entries.forEach(function(e){
+    var a=ang.find(function(x){return x.id===e.id});
+    var dur=(e.start&&e.end)?fmin(t2m(e.end)-t2m(e.start)):'-';
+    var tr=document.createElement('tr');
+    function td(txt,warn){var c=document.createElement('td');if(warn){var s=document.createElement('span');s.style.color='var(--warning)';s.textContent=txt;c.appendChild(s);}else{c.textContent=txt;}return c;}
+    tr.appendChild(td(a?a.name:'(sters)'));
+    tr.appendChild(td(fdate(e.data)));
+    tr.appendChild(td(e.start));
+    tr.appendChild(e.end?td(e.end):td('-',true));
+    tr.appendChild(td(dur));
+    // Semnatura
+    var sigTd=document.createElement('td');
+    if(e.sig){
+      var sigImg=document.createElement('img');
+      sigImg.src=e.sig;sigImg.className='sig-thumb';
+      sigImg.addEventListener('click',function(){viewSig(this.src);});
+      sigTd.appendChild(sigImg);
+    } else {
+      var sigNone=document.createElement('span');
+      sigNone.style.cssText='color:var(--text3);font-size:11px;';
+      sigNone.textContent='-';
+      sigTd.appendChild(sigNone);
+    }
+    tr.appendChild(sigTd);
+    // Edit button
+    var editBtn=document.createElement('button');
+    editBtn.className='ba';editBtn.style.cssText='padding:4px 8px;font-size:12px';
+    editBtn.textContent='Edit';editBtn.dataset.uid=e.uid;
+    editBtn.addEventListener('click',function(){openEditEntry(this.dataset.uid);});
+    var editTd=document.createElement('td');editTd.appendChild(editBtn);tr.appendChild(editTd);
+    // Delete button with double confirm
+    var delBtn=document.createElement('button');
+    delBtn.className='ba bdanger';delBtn.style.cssText='padding:4px 8px;font-size:12px';
+    delBtn.textContent='Del';delBtn.dataset.uid=e.uid;delBtn.dataset.step='1';
+    delBtn.addEventListener('click',function(){
+      if(this.dataset.step==='1'){
+        this.textContent='Sigur?';this.dataset.step='2';
+        var self=this;setTimeout(function(){if(self.dataset.step==='2'){self.textContent='Del';self.dataset.step='1';}},2500);
+      } else {
+        delEntry(this.dataset.uid);
+      }
+    });
+    var delTd=document.createElement('td');delTd.appendChild(delBtn);tr.appendChild(delTd);
+    tb.appendChild(tr);
   });
 }
 
+/* ADMIN - Angajati */
 function addA(){
   var inp=document.getElementById('nname'),name=inp.value.trim();
-  var pinInp=document.getElementById('npin'),apin=pinInp.value.trim();
   if(!name)return;
-  if(!/^\d{4}$/.test(apin)){toast('PIN angajat: 4 cifre obligatoriu.');return;}
   if(ang.some(function(a){return a.name.toLowerCase()===name.toLowerCase()})){toast('Angajat deja existent.');return}
-  ang.push({id:uid(),name:name,pin:apin}); sv(); inp.value=''; pinInp.value='';
+  ang.push({id:uid(),name:name,key:genKey()}); sv(); inp.value='';
   renderA(); renderP(); popSel(); toast('Adaugat: '+name);
+}
+function genKey(){
+  var c='abcdefghjkmnpqrstuvwxyz23456789';
+  var k='';for(var i=0;i<8;i++)k+=c[Math.floor(Math.random()*c.length)];
+  return k;
 }
 function delA(id){
   var a=ang.find(function(x){return x.id===id});
@@ -769,14 +884,48 @@ function renderR(entries){
   var zile=new Set(s.map(function(e){return e.data})).size;
   var au=new Set(s.map(function(e){return e.id})).size;
   sum.innerHTML='<div class="scard"><div class="slabel">Total ore</div><div class="sval">'+fmin(tot)+'</div></div><div class="scard"><div class="slabel">Zile lucrate</div><div class="sval">'+zile+'</div></div><div class="scard"><div class="slabel">Angajati</div><div class="sval">'+au+'</div></div>';
-  tb.innerHTML=s.map(function(e){var a=ang.find(function(x){return x.id===e.id});var dur=(e.start&&e.end)?fmin(t2m(e.end)-t2m(e.start)):'-';return '<tr><td>'+(a?a.name:'(sters)')+'</td><td>'+fdate(e.data)+'</td><td>'+e.start+'</td><td>'+(e.end||'<span style="color:var(--warning)">-</span>')+'</td><td>'+dur+'</td></tr>'}).join('');
+  tb.innerHTML=s.map(function(e){var a=ang.find(function(x){return x.id===e.id});var dur=(e.start&&e.end)?fmin(t2m(e.end)-t2m(e.start)):'-';var sig=e.sig?'<img src="'+e.sig+'" class="sig-thumb" onclick="viewSig(\''+e.sig.replace(/'/g,"\\'")+'\')">':'<span style="color:var(--text3);font-size:11px;">-</span>';return '<tr><td>'+(a?a.name:'(sters)')+'</td><td>'+fdate(e.data)+'</td><td>'+e.start+'</td><td>'+(e.end||'<span style="color:var(--warning)">-</span>')+'</td><td>'+dur+'</td><td>'+sig+'</td></tr>'}).join('');
 }
 function expCSV(){
   var s=lg.slice().sort(function(a,b){return b.data.localeCompare(a.data)});
-  var rows=[['Angajat','Data','Intrare','Iesire','Minute']];
-  s.forEach(function(e){var a=ang.find(function(x){return x.id===e.id});var m=(e.start&&e.end)?Math.max(0,t2m(e.end)-t2m(e.start)):'';rows.push([a?a.name:e.id,e.data,e.start,e.end||'',m])});
+  var rows=[['Angajat','Data','Intrare','Iesire','Minute','Semnatura']];
+  s.forEach(function(e){var a=ang.find(function(x){return x.id===e.id});var m=(e.start&&e.end)?Math.max(0,t2m(e.end)-t2m(e.start)):'';rows.push([a?a.name:e.id,e.data,e.start,e.end||'',m,e.sig?'Da':'Nu'])});
   var csv=rows.map(function(r){return r.join(',')}).join('\n');
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='pontaj_'+today()+'.csv';a.click();
+}
+function slugify(str){
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'_').replace(/^_+|_+$/g,'').toLowerCase();
+}
+async function expZIP(){
+  if(typeof JSZip==='undefined'){toast('Eroare: librarie ZIP indisponibila.');return;}
+  var s=lg.slice().sort(function(a,b){return b.data.localeCompare(a.data)});
+  var zip=new JSZip();
+  var rows=[['Angajat','Data','Intrare','Iesire','Minute','Fisier semnatura']];
+  var sigFolder=zip.folder('semnaturi');
+  var usedNames={};
+  s.forEach(function(e){
+    var a=ang.find(function(x){return x.id===e.id});
+    var name=a?a.name:e.id;
+    var m=(e.start&&e.end)?Math.max(0,t2m(e.end)-t2m(e.start)):'';
+    var sigFile='';
+    if(e.sig){
+      var base=slugify(name)+'_'+e.data;
+      var n=usedNames[base]||0;
+      usedNames[base]=n+1;
+      sigFile=base+(n>0?'_'+n:'')+'.png';
+      var b64=e.sig.split(',')[1]||'';
+      sigFolder.file(sigFile,b64,{base64:true});
+    }
+    rows.push([name,e.data,e.start,e.end||'',m,sigFile]);
+  });
+  var csv=rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
+  zip.file('pontaj_'+today()+'.csv',csv);
+  var blob=await zip.generateAsync({type:'blob'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='pontaj_export_'+today()+'.zip';
+  a.click();
+  toast('Export ZIP generat.');
 }
 
 /* ADMIN - Tabs */
@@ -828,34 +977,40 @@ document.getElementById('nname').addEventListener('keydown',function(e){if(e.key
 updDate(); setInterval(updDate,60000);
 
 // Start Firebase sync after page loaded
-// Start app immediately with localStorage data
-fbReady=true;
-initApp();
-
-// Then sync Firebase in background
 window.addEventListener('load', function(){
-  try {
-    var db=firebase.database();
-    window.fbdb=db;
-    db.ref('pontaj/angajati').on('value',function(snap){
-      var data=snap.val();
-      ang=(data&&Array.isArray(data))?data:[];
+  var db=firebase.database();
+  window.fbdb=db;
+  var loadedCount=0;
+  function onFbLoaded(){
+    loadedCount++;
+    if(loadedCount>=2&&!fbReady){fbReady=true;initApp();}
+  }
+  db.ref('pontaj/angajati').on('value',function(snap){
+    var data=snap.val();
+    if(data&&Array.isArray(data)){
+      ang=data;
       localStorage.setItem(SKA,JSON.stringify(ang));
-      renderP();if(isAdm){popSel();renderA();}
-    });
-    db.ref('pontaj/log').on('value',function(snap){
-      var data=snap.val();
-      lg=(data&&Array.isArray(data))?data:[];
+      if(fbReady){renderP();if(isAdm){popSel();renderA();}}
+    }
+    onFbLoaded();
+  });
+  db.ref('pontaj/log').on('value',function(snap){
+    var data=snap.val();
+    if(data&&Array.isArray(data)){
+      lg=data;
       localStorage.setItem(SKL,JSON.stringify(lg));
-      renderP();if(isAdm){renderL();}
-    });
-    db.ref('pontaj/pin').on('value',function(snap){
-      var p=snap.val();
-      if(p&&typeof p==='string'&&/^\d{4}$/.test(p)){
-        localStorage.setItem(SKP,p);
-      }
-    });
-  } catch(e){console.log('Firebase error:',e);}
+      if(fbReady){renderP();if(isAdm){renderL();}}
+    }
+    onFbLoaded();
+  });
+  db.ref('pontaj/pin').on('value',function(snap){
+    var p=snap.val();
+    if(p&&typeof p==='string'&&/^\d{4}$/.test(p)){
+      localStorage.setItem(SKP,p);
+    }
+  });
+  // Fallback: if Firebase takes too long
+  setTimeout(function(){if(!fbReady){fbReady=true;initApp();}},2000);
 });
 
 /* ===== SCROLL WHEEL TIME PICKER ===== */
@@ -912,13 +1067,20 @@ function makeDrum(drumId, values, initIdx, onChangeFn){
     onChangeFn(values[next]);
   },{passive:false});
 
-  var _ty=null,_sy=null;
-  drum.addEventListener('touchstart',function(e){_ty=e.touches[0].clientY;_sy=drum.scrollTop;},{passive:true});
+  var _ty=null,_sy=null,_startY=null;
+  var TOUCH_DAMPING=0.55;
+  drum.addEventListener('touchstart',function(e){
+    _ty=e.touches[0].clientY;
+    _startY=_ty;
+    _sy=drum.scrollTop;
+  },{passive:true});
   drum.addEventListener('touchmove',function(e){
     if(_ty===null)return;
-    drum.scrollTop=_sy-(_ty-e.touches[0].clientY);
+    var rawDelta=_ty-e.touches[0].clientY;
+    var damped=rawDelta*TOUCH_DAMPING;
+    drum.scrollTop=_sy+damped;
   },{passive:true});
-  drum.addEventListener('touchend',function(){_ty=null;_sy=null;},{passive:true});
+  drum.addEventListener('touchend',function(){_ty=null;_sy=null;_startY=null;},{passive:true});
 }
 
 function styleDrum(drum,idx){
@@ -1211,9 +1373,87 @@ document.addEventListener('click',function(e){
   if(!popup.contains(e.target)&&e.target!==CDP.triggerEl) closeCDP();
 },{capture:true});
 
-/* URL auth removed */
+/* ===== URL ACCESS CHECK ===== */
+function getParam(name){
+  var p=new URLSearchParams(window.location.search);
+  return p.get(name);
+}
+var URL_ANG_ID=getParam('a');
+var URL_KEY=getParam('k');
 
-function initApp(){showA();}
+function checkAccess(){
+  if(!URL_ANG_ID&&!URL_KEY) return true;
+  // Key in URL is sufficient auth - no localStorage lookup needed
+  // (localStorage may be empty on other devices)
+  if(URL_ANG_ID&&URL_KEY&&URL_KEY.length>=6) return true;
+  return false;
+}
+
+function initApp(){
+  // No params = go to PIN/admin only, never show employee list publicly
+  if(!URL_ANG_ID&&!URL_KEY){
+    showPin();
+    return;
+  }
+  // Has params but invalid key
+  if(!checkAccess()){
+    document.getElementById('va').style.display='none';
+    document.getElementById('vp').style.display='none';
+    document.getElementById('vadmin').style.display='none';
+    var body=document.querySelector('.main');
+    body.innerHTML='<div style="text-align:center;padding:4rem 1rem"><div style="font-family:Playfair Display,serif;font-size:22px;color:var(--danger);margin-bottom:1rem">Acces interzis</div><div style="color:var(--text2);font-size:15px">Link invalid. Foloseste tag-ul NFC personal.</div></div>';
+    return;
+  }
+  // Valid employee URL - use URL params directly, no Firebase lookup needed
+  var urlName=getParam('n')||'Angajat';
+  var a=ang.find(function(x){return x.id===URL_ANG_ID});
+  if(!a){
+    a={id:URL_ANG_ID,name:decodeURIComponent(urlName),key:URL_KEY};
+    ang.push(a);
+    localStorage.setItem(SKA,JSON.stringify(ang));
+    // sync to Firebase without overwriting other employees
+    if(window.fbdb) window.fbdb.ref('pontaj/angajati').set(ang);
+  }
+  showAngajatSingle(a.id);
+}
+
+function showAngajatSingle(angId){
+  document.getElementById('vloading').style.display='none';
+  document.getElementById('va').style.display='';
+  document.getElementById('vp').style.display='none';
+  document.getElementById('vadmin').style.display='none';
+  document.getElementById('admin-badge').style.display='none';
+  document.getElementById('blogt').style.display='none';
+  document.getElementById('alinkw').style.display='none';
+  // Render only this employee
+  var g=document.getElementById('agrid');
+  g.innerHTML='';
+  var a=ang.find(function(x){return x.id===angId});
+  if(!a){g.innerHTML='<div style="padding:2rem;text-align:center;color:var(--text3)">Angajat negasit.</div>';return;}
+  var entries=entriesForAng(a.id,today());
+  var hasEntry=entries.length>0;
+  var st,stClass='';
+  if(hasEntry){
+    var e0=entries[0];
+    var dur=(e0.start&&e0.end)?fmin(t2m(e0.end)-t2m(e0.start)):null;
+    st=e0.start+' — '+e0.end+(dur?' ('+dur+')':'');
+    stClass='done';
+  } else {st='Apasa pentru a inregistra tura';stClass='';}
+  var card=document.createElement('div');
+  card.className='acard'+(hasEntry?' has-entry':'');
+  card.dataset.angId=a.id;
+  var av=document.createElement('div');av.className='av';av.textContent=ini(a.name);
+  var nm=document.createElement('div');nm.className='aname';nm.textContent=a.name;
+  var stel=document.createElement('div');stel.className='astatus '+stClass;stel.textContent=st;
+  var tw=document.createElement('div');tw.appendChild(nm);tw.appendChild(stel);
+  var ai=document.createElement('div');ai.className='ainfo';ai.appendChild(av);ai.appendChild(tw);
+  var chev=document.createElement('span');chev.className='achevron';chev.innerHTML='&#x203a;';
+  card.appendChild(ai);card.appendChild(chev);
+  card.addEventListener('click',function(){openPontaj(this.dataset.angId);});
+  g.appendChild(card);
+}
+
 </script>
+
 </body>
 </html>
