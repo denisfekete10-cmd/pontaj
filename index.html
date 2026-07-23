@@ -40,7 +40,7 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 /* Modal form */
 .moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:flex-end;justify-content:center;padding:0}
 .moverlay.open{display:flex}
-.msheet{background:var(--bg2);border:.5px solid var(--border-strong);border-radius:var(--radius) var(--radius) 0 0;padding:1.5rem;width:100%;max-width:500px;animation:slideup .22s ease}
+.msheet{background:var(--bg2);border:.5px solid var(--border-strong);border-radius:var(--radius) var(--radius) 0 0;padding:1.5rem;width:100%;max-width:500px;animation:slideup .22s ease;max-height:92vh;overflow-y:auto}
 @keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .msheet-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between}
 .mclose{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;line-height:1;padding:0 4px}
@@ -174,6 +174,13 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 .cdp-day.other{color:var(--text3)}
 .cdp-day.today{border:.5px solid var(--border-strong)}
 .cdp-dow{font-size:11px;color:var(--text3);padding:3px 0;font-family:'Playfair Display',serif;letter-spacing:.04em}
+
+/* Preset ore */
+.preset-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.preset-lbl{font-size:11px;color:var(--text3);font-style:italic;letter-spacing:.03em}
+.preset-inp{background:var(--bg3);color:var(--gold);border:.5px solid var(--border-strong);border-radius:6px;padding:4px 8px;font-family:'EB Garamond',serif;font-size:14px;width:68px;text-align:center;letter-spacing:.04em}
+.preset-inp:focus{outline:none;border-color:var(--gold)}
+.preset-sep{color:var(--text3);font-size:13px}
 </style>
 
 <!-- Firebase -->
@@ -212,7 +219,7 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
 
   <div id="va" style="display:none">
     <div class="agrid" id="agrid"></div>
-    <div class="alinkw"><button class="alink" onclick="showPin()">admin</button></div>
+    <div class="alinkw" id="alinkw"><button class="alink" onclick="showPin()">admin</button></div>
   </div>
   <!-- PIN -->
   <div id="vp" style="display:none">
@@ -255,6 +262,7 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
           <input class="cdp-input" id="lfd-disp" readonly placeholder="Toate zilele" onclick="openCDP('lfd',this)">
           <input type="hidden" id="lfd">
         </div>
+        <button class="ba" style="flex:none" onclick="openManualEntry()">+ Adauga manual</button>
         <button class="ba bdanger" style="flex:none" onclick="confirmClear()">Sterge tot</button>
       </div>
       <div class="lwrap">
@@ -283,7 +291,7 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
       <div class="sgrid" id="rsum"></div>
       <div class="lwrap">
         <table class="lt">
-          <thead><tr><th style="width:18%">Angajat</th><th style="width:11%">Data</th><th style="width:10%">Intrare</th><th style="width:10%">Iesire</th><th style="width:10%">Ore</th><th style="width:13%">Semnatura</th><th style="width:13%">Edit</th><th style="width:13%">Del</th></tr></thead>
+          <thead><tr><th style="width:22%">Angajat</th><th style="width:14%">Data</th><th style="width:13%">Intrare</th><th style="width:13%">Iesire</th><th style="width:16%">Ore</th><th style="width:22%">Semnatura</th></tr></thead>
           <tbody id="rtbody"></tbody>
         </table>
         <div class="empty" id="rempty">Selecteaza interval si apasa Calculeaza.</div>
@@ -459,6 +467,63 @@ header{background:var(--bg2);border-bottom:.5px solid var(--border-strong);paddi
   </div>
 </div>
 
+<!-- MANUAL ENTRY MODAL (admin) -->
+<div class="moverlay" id="manualModal" onclick="closeManualModal(event)">
+  <div class="msheet">
+    <div class="msheet-title">
+      <span>Adauga pontaj manual</span>
+      <button class="mclose" onclick="closeManualDirect()">&#x2715;</button>
+    </div>
+    <div class="merr" id="manErr"></div>
+    <div class="date-row">
+      <label>ANGAJAT</label>
+      <select id="mangSel" style="width:100%;background:var(--bg3);color:var(--text);border:.5px solid var(--border-strong);border-radius:8px;padding:10px 12px;font-family:'EB Garamond',serif;font-size:16px"></select>
+    </div>
+    <div class="date-row">
+      <label>DATA</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="ba" onclick="mdateShift(-1)" style="flex:none;padding:8px 14px;font-size:18px">&#x2039;</button>
+        <div id="mdate-display" style="flex:1;background:var(--bg3);border:.5px solid var(--border-strong);border-radius:8px;padding:10px;text-align:center;font-size:16px;color:var(--gold);letter-spacing:.04em"></div>
+        <button class="ba" onclick="mdateShift(1)" style="flex:none;padding:8px 14px;font-size:18px">&#x203a;</button>
+      </div>
+      <input type="hidden" id="mdate">
+    </div>
+    <div class="time-row">
+      <div class="time-block">
+        <label>ORA INTRARE</label>
+        <div class="sw-wrap" id="sw-mstart2">
+          <div class="sw-display" id="sw-mstart2-display" onclick="toggleDrums('mstart2')">--:--</div>
+          <div class="sw-drums" id="drums-mstart2" style="display:none">
+            <div class="sw-highlight"></div>
+            <div class="sw-col"><div class="sw-fade-top"></div><div class="sw-drum" id="drum-mstart2-h"></div><div class="sw-fade-bot"></div></div>
+            <div class="sw-sep">:</div>
+            <div class="sw-col"><div class="sw-fade-top"></div><div class="sw-drum" id="drum-mstart2-m"></div><div class="sw-fade-bot"></div></div>
+          </div>
+        </div>
+        <input type="hidden" id="mstart2">
+      </div>
+      <div class="time-block">
+        <label>ORA IESIRE</label>
+        <div class="sw-wrap" id="sw-mend2">
+          <div class="sw-display" id="sw-mend2-display" onclick="toggleDrums('mend2')">--:--</div>
+          <div class="sw-drums" id="drums-mend2" style="display:none">
+            <div class="sw-highlight"></div>
+            <div class="sw-col"><div class="sw-fade-top"></div><div class="sw-drum" id="drum-mend2-h"></div><div class="sw-fade-bot"></div></div>
+            <div class="sw-sep">:</div>
+            <div class="sw-col"><div class="sw-fade-top"></div><div class="sw-drum" id="drum-mend2-m"></div><div class="sw-fade-bot"></div></div>
+          </div>
+        </div>
+        <input type="hidden" id="mend2">
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--text3);font-style:italic;margin-bottom:1rem">Inregistrarea manuala nu are semnatura.</p>
+    <div class="mbtns">
+      <button class="ba" onclick="closeManualDirect()">Anuleaza</button>
+      <button class="ba primary" onclick="saveManualEntry()">Salveaza</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 <div class="cmodal" id="cmodal">
   <div class="cmodalbox">
@@ -511,6 +576,7 @@ function hasTodayEntry(id){return entriesForAng(id,today()).length>0}
 
 /* VIEWS */
 function showA(){
+  document.getElementById('vloading').style.display='none';
   document.getElementById('va').style.display='';
   document.getElementById('vp').style.display='none';
   document.getElementById('vadmin').style.display='none';
@@ -523,9 +589,13 @@ function showPin(){
   document.getElementById('va').style.display='none';
   document.getElementById('vp').style.display='';
   document.getElementById('vadmin').style.display='none';
+  document.getElementById('abadge').style.display='none';
+  document.getElementById('blogt').style.display='none';
+  isAdm=false;
   pin=''; document.getElementById('perr').textContent=''; rDots();
 }
 function showAdm(){
+  document.getElementById('vloading').style.display='none';
   document.getElementById('va').style.display='none';
   document.getElementById('vp').style.display='none';
   document.getElementById('vadmin').style.display='';
@@ -547,6 +617,9 @@ function pb(){if(pin.length>0){pin=pin.slice(0,-1);rDots()}}
 /* ANGAJAT GRID */
 function renderP(){
   var g=document.getElementById('agrid');
+  if(!g)return;
+  // if in single-employee mode, re-render only that one
+  if(URL_ANG_ID&&URL_KEY&&!isAdm){showAngajatSingle(URL_ANG_ID);return;}
   g.innerHTML='';
   if(ang.length===0){
     var d=document.createElement('div');
@@ -562,7 +635,7 @@ function renderP(){
     if(entries.length>0){
       var e0=entries[0];
       var dur=(e0.start&&e0.end)?fmin(t2m(e0.end)-t2m(e0.start)):null;
-      st=e0.start+' — '+e0.end+(dur?' ('+dur+')':'');
+      st=e0.start+' \u2014 '+e0.end+(dur?' ('+dur+')':'');
       stClass='done';
     } else {st='Apasa pentru a inregistra tura';stClass=''}
     var card=document.createElement('div');
@@ -584,6 +657,7 @@ function renderP(){
 function openPontaj(id){
   curAngId=id;
   var a=ang.find(function(x){return x.id===id});
+  if(!a)return;
   if(entriesForAng(id,today()).length>0){
     toast(a.name+' a inregistrat deja tura de azi.');return;
   }
@@ -592,98 +666,12 @@ function openPontaj(id){
   document.getElementById('pontajModal').classList.add('open');
   requestAnimationFrame(function(){resetClocks();if(!sigCtx)initSignaturePad();else resizeSigCanvas();clearSignature();});
 }
-function renderEntriesToday(id,date){}
 
 function closePontaj(ev){if(ev.target===document.getElementById('pontajModal'))closePontajDirect()}
-function closePontajDirect(){document.getElementById('pontajModal').classList.remove('open');curAngId=null}
-function delEntry(uid){
-  lg=lg.filter(function(e){return e.uid!==uid}); sv();
-  // entry deleted - no need to re-render entries list (feature removed)
-  renderP(); if(isAdm)renderL();
-  toast('Inregistrare stearsa.');
+function closePontajDirect(){
+  if(swOpen&&(swOpen==='start'||swOpen==='end'))closeDrums(swOpen);
+  document.getElementById('pontajModal').classList.remove('open');curAngId=null;
 }
-
-/* ADMIN - Log */
-function renderL(){
-  var fa=document.getElementById('lfa').value,fd=document.getElementById('lfd').value;
-  var entries=lg;
-  if(fa)entries=entries.filter(function(e){return e.id===fa});
-  if(fd)entries=entries.filter(function(e){return e.data===fd});
-  entries=entries.slice().sort(function(a,b){return b.ts-a.ts});
-  var tb=document.getElementById('ltbody'),em=document.getElementById('lempty');
-  tb.innerHTML='';
-  if(entries.length===0){em.style.display='';return}
-  em.style.display='none';
-  entries.forEach(function(e){
-    var a=ang.find(function(x){return x.id===e.id});
-    var dur=(e.start&&e.end)?fmin(t2m(e.end)-t2m(e.start)):'-';
-    var tr=document.createElement('tr');
-    function td(txt,warn){var c=document.createElement('td');if(warn){var s=document.createElement('span');s.style.color='var(--warning)';s.textContent=txt;c.appendChild(s);}else{c.textContent=txt;}return c;}
-    tr.appendChild(td(a?a.name:'(sters)'));
-    tr.appendChild(td(fdate(e.data)));
-    tr.appendChild(td(e.start));
-    tr.appendChild(e.end?td(e.end):td('-',true));
-    tr.appendChild(td(dur));
-    // Edit button
-    var editBtn=document.createElement('button');
-    editBtn.className='ba';editBtn.style.cssText='padding:4px 8px;font-size:12px';
-    editBtn.textContent='Edit';editBtn.dataset.uid=e.uid;
-    editBtn.addEventListener('click',function(){openEditEntry(this.dataset.uid);});
-    var editTd=document.createElement('td');editTd.appendChild(editBtn);tr.appendChild(editTd);
-    // Delete button with double confirm
-    var delBtn=document.createElement('button');
-    delBtn.className='ba bdanger';delBtn.style.cssText='padding:4px 8px;font-size:12px';
-    delBtn.textContent='Del';delBtn.dataset.uid=e.uid;delBtn.dataset.step='1';
-    delBtn.addEventListener('click',function(){
-      if(this.dataset.step==='1'){
-        this.textContent='Sigur?';this.dataset.step='2';
-        var self=this;setTimeout(function(){if(self.dataset.step==='2'){self.textContent='Del';self.dataset.step='1';}},2500);
-      } else {
-        delEntry(this.dataset.uid);
-      }
-    });
-    var delTd=document.createElement('td');delTd.appendChild(delBtn);tr.appendChild(delTd);
-    tb.appendChild(tr);
-  });
-}
-
-/* ADMIN - Angajati */
-function renderA(){
-  var l=document.getElementById('alist');
-  l.innerHTML='';
-  if(ang.length===0){
-    var d=document.createElement('div');d.className='empty';d.textContent='Niciun angajat.';l.appendChild(d);return;
-  }
-  var base=window.location.href.split('?')[0];
-  ang.forEach(function(a){
-    if(!a.key){a.key=genKey();sv();}
-    var url=base+'?a='+a.id+'&k='+a.key+'&n='+encodeURIComponent(a.name);
-    var item=document.createElement('div');item.className='aitem';item.style.flexDirection='column';item.style.alignItems='stretch';item.style.gap='8px';
-    // top row: avatar + name + delete
-    var top=document.createElement('div');top.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px';
-    var av=document.createElement('div');av.className='av';av.style.cssText='width:34px;height:34px;font-size:12px;flex-shrink:0';av.textContent=ini(a.name);
-    var nm=document.createElement('span');nm.style.cssText='font-size:15px;color:var(--text);flex:1';nm.textContent=a.name;
-    var bdel=document.createElement('button');bdel.className='bdel2';bdel.innerHTML='&#215;';
-    bdel.dataset.angId=a.id;
-    bdel.addEventListener('click',function(){delA(this.dataset.angId);});
-    top.appendChild(av);top.appendChild(nm);top.appendChild(bdel);
-    // url row
-    var urlRow=document.createElement('div');urlRow.style.cssText='display:flex;align-items:center;gap:6px';
-    var urlDisp=document.createElement('div');
-    urlDisp.style.cssText='font-size:11px;color:var(--text3);background:var(--bg3);border-radius:6px;padding:5px 8px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:monospace';
-    urlDisp.textContent=url;
-    var copyBtn=document.createElement('button');copyBtn.className='ba';copyBtn.style.cssText='flex:none;padding:4px 10px;font-size:12px';
-    copyBtn.textContent='Copy';
-    copyBtn.dataset.url=url;
-    copyBtn.addEventListener('click',function(){
-      navigator.clipboard.writeText(this.dataset.url).then(function(){toast('URL copiat!');});
-    });
-    urlRow.appendChild(urlDisp);urlRow.appendChild(copyBtn);
-    item.appendChild(top);item.appendChild(urlRow);l.appendChild(item);
-  });
-}
-function closePontaj(ev){if(ev.target===document.getElementById('pontajModal'))closePontajDirect()}
-function closePontajDirect(){document.getElementById('pontajModal').classList.remove('open');curAngId=null}
 function savePontaj(){
   var date=today();
   var start=document.getElementById('mstart').value;
@@ -693,17 +681,19 @@ function savePontaj(){
   if(!end){err.textContent='Selecteaza si ora de iesire.';return;}
   if(t2m(end)<=t2m(start)){err.textContent='Ora de iesire trebuie sa fie dupa intrare.';return;}
   if(!sigHasStroke){err.textContent='Semneaza pentru a confirma orele.';return;}
-  // only one entry per day per employee
   var existing=entriesForAng(curAngId,date);
   if(existing.length>0){err.textContent='Ai deja o inregistrare pentru ziua aceasta.';return;}
   err.textContent='';
   var sigData=sigCanvas?sigCanvas.toDataURL('image/png'):null;
-  var entry={uid:uid(),id:curAngId,data:date,start:start,end:end,ts:Date.now(),sig:sigData};
+  var entry={uid:uid(),id:curAngId,data:date,start:start,end:end,ts:dateToTs(date,start),sig:sigData};
   lg.push(entry);sv();
   var a=ang.find(function(x){return x.id===curAngId});
   toast('Salvat \u2014 '+a.name+' '+start+' - '+end);
-  renderP();
+  var savedId=curAngId;
   closePontajDirect();
+  curAngId=savedId;
+  renderP();
+  curAngId=null;
 }
 
 /* ===== SEMNATURA DIGITALA ===== */
@@ -777,9 +767,8 @@ function closeSigView(ev){
   if(ev&&ev.target!==document.getElementById('sigViewOverlay'))return;
   document.getElementById('sigViewOverlay').classList.remove('open');
 }
-function delEntry(uid){
-  lg=lg.filter(function(e){return e.uid!==uid}); sv();
-  // entry deleted - no need to re-render entries list (feature removed)
+function delEntry(u){
+  lg=lg.filter(function(e){return e.uid!==u}); sv();
   renderP(); if(isAdm)renderL();
   toast('Inregistrare stearsa.');
 }
@@ -790,7 +779,7 @@ function renderL(){
   var entries=lg;
   if(fa)entries=entries.filter(function(e){return e.id===fa});
   if(fd)entries=entries.filter(function(e){return e.data===fd});
-  entries=entries.slice().sort(function(a,b){return b.ts-a.ts});
+  entries=entries.slice().sort(function(a,b){return b.data.localeCompare(a.data)||b.start.localeCompare(a.start)});
   var tb=document.getElementById('ltbody'),em=document.getElementById('lempty');
   tb.innerHTML='';
   if(entries.length===0){em.style.display='';return}
@@ -814,8 +803,8 @@ function renderL(){
       sigTd.appendChild(sigImg);
     } else {
       var sigNone=document.createElement('span');
-      sigNone.style.cssText='color:var(--text3);font-size:11px;';
-      sigNone.textContent='-';
+      sigNone.style.cssText='color:var(--text3);font-size:11px;font-style:italic';
+      sigNone.textContent=e.manual?'manual':'-';
       sigTd.appendChild(sigNone);
     }
     tr.appendChild(sigTd);
@@ -843,6 +832,75 @@ function renderL(){
 }
 
 /* ADMIN - Angajati */
+function renderA(){
+  var l=document.getElementById('alist');
+  l.innerHTML='';
+  if(ang.length===0){
+    var d=document.createElement('div');d.className='empty';d.textContent='Niciun angajat.';l.appendChild(d);return;
+  }
+  var base=window.location.href.split('?')[0];
+  var needSave=false;
+  ang.forEach(function(a){
+    if(!a.key){a.key=genKey();needSave=true;}
+    var url=base+'?a='+a.id+'&k='+a.key+'&n='+encodeURIComponent(a.name);
+    var item=document.createElement('div');item.className='aitem';item.style.flexDirection='column';item.style.alignItems='stretch';item.style.gap='8px';
+    // top row: avatar + name + delete
+    var top=document.createElement('div');top.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px';
+    var av=document.createElement('div');av.className='av';av.style.cssText='width:34px;height:34px;font-size:12px;flex-shrink:0';av.textContent=ini(a.name);
+    var nm=document.createElement('span');nm.style.cssText='font-size:15px;color:var(--text);flex:1';nm.textContent=a.name;
+    var bdel=document.createElement('button');bdel.className='bdel2';bdel.innerHTML='&#215;';
+    bdel.dataset.angId=a.id;
+    bdel.addEventListener('click',function(){delA(this.dataset.angId);});
+    top.appendChild(av);top.appendChild(nm);top.appendChild(bdel);
+    // url row
+    var urlRow=document.createElement('div');urlRow.style.cssText='display:flex;align-items:center;gap:6px';
+    var urlDisp=document.createElement('div');
+    urlDisp.style.cssText='font-size:11px;color:var(--text3);background:var(--bg3);border-radius:6px;padding:5px 8px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:monospace';
+    urlDisp.textContent=url;
+    var copyBtn=document.createElement('button');copyBtn.className='ba';copyBtn.style.cssText='flex:none;padding:4px 10px;font-size:12px';
+    copyBtn.textContent='Copy';
+    copyBtn.dataset.url=url;
+    copyBtn.addEventListener('click',function(){
+      navigator.clipboard.writeText(this.dataset.url).then(function(){toast('URL copiat!');});
+    });
+    urlRow.appendChild(urlDisp);urlRow.appendChild(copyBtn);
+    // preset ore
+    var pr=document.createElement('div');pr.className='preset-row';
+    var plbl=document.createElement('span');plbl.className='preset-lbl';plbl.textContent='Preset ore:';
+    var pi1=document.createElement('input');pi1.className='preset-inp';pi1.type='text';pi1.placeholder='16:00';pi1.maxLength=5;
+    pi1.value=a.pstart||'';
+    var psep=document.createElement('span');psep.className='preset-sep';psep.textContent='\u2014';
+    var pi2=document.createElement('input');pi2.className='preset-inp';pi2.type='text';pi2.placeholder='22:00';pi2.maxLength=5;
+    pi2.value=a.pend||'';
+    var psave=document.createElement('button');psave.className='ba';psave.style.cssText='flex:none;padding:4px 10px;font-size:12px';
+    psave.textContent='Salveaza';
+    psave.dataset.angId=a.id;
+    psave.addEventListener('click',function(){savePreset(this.dataset.angId,pi1.value.trim(),pi2.value.trim());});
+    pr.appendChild(plbl);pr.appendChild(pi1);pr.appendChild(psep);pr.appendChild(pi2);pr.appendChild(psave);
+    item.appendChild(top);item.appendChild(urlRow);item.appendChild(pr);l.appendChild(item);
+  });
+  if(needSave)sv();
+}
+
+function validT(v){
+  if(!/^\d{1,2}:\d{2}$/.test(v))return null;
+  var p=v.split(':'),h=Number(p[0]),m=Number(p[1]);
+  if(h<0||h>23||m<0||m>59)return null;
+  var rm=Math.round(m/5)*5;
+  if(rm>=60){rm=55;}
+  return String(h).padStart(2,'0')+':'+String(rm).padStart(2,'0');
+}
+function savePreset(id,s,e){
+  var a=ang.find(function(x){return x.id===id});
+  if(!a)return;
+  if(!s&&!e){delete a.pstart;delete a.pend;sv();renderA();toast('Preset sters.');return;}
+  var vs=validT(s),ve=validT(e);
+  if(!vs||!ve){toast('Format invalid. Foloseste HH:MM.');return;}
+  if(t2m(ve)<=t2m(vs)){toast('Ora de iesire trebuie sa fie dupa intrare.');return;}
+  a.pstart=vs;a.pend=ve;sv();renderA();
+  toast('Preset salvat: '+vs+' - '+ve);
+}
+
 function addA(){
   var inp=document.getElementById('nname'),name=inp.value.trim();
   if(!name)return;
@@ -884,12 +942,34 @@ function renderR(entries){
   var zile=new Set(s.map(function(e){return e.data})).size;
   var au=new Set(s.map(function(e){return e.id})).size;
   sum.innerHTML='<div class="scard"><div class="slabel">Total ore</div><div class="sval">'+fmin(tot)+'</div></div><div class="scard"><div class="slabel">Zile lucrate</div><div class="sval">'+zile+'</div></div><div class="scard"><div class="slabel">Angajati</div><div class="sval">'+au+'</div></div>';
-  tb.innerHTML=s.map(function(e){var a=ang.find(function(x){return x.id===e.id});var dur=(e.start&&e.end)?fmin(t2m(e.end)-t2m(e.start)):'-';var sig=e.sig?'<img src="'+e.sig+'" class="sig-thumb" onclick="viewSig(\''+e.sig.replace(/'/g,"\\'")+'\')">':'<span style="color:var(--text3);font-size:11px;">-</span>';return '<tr><td>'+(a?a.name:'(sters)')+'</td><td>'+fdate(e.data)+'</td><td>'+e.start+'</td><td>'+(e.end||'<span style="color:var(--warning)">-</span>')+'</td><td>'+dur+'</td><td>'+sig+'</td></tr>'}).join('');
+  tb.innerHTML='';
+  s.forEach(function(e){
+    var a=ang.find(function(x){return x.id===e.id});
+    var dur=(e.start&&e.end)?fmin(t2m(e.end)-t2m(e.start)):'-';
+    var tr=document.createElement('tr');
+    function td(txt,warn){var c=document.createElement('td');if(warn){var sp=document.createElement('span');sp.style.color='var(--warning)';sp.textContent=txt;c.appendChild(sp);}else{c.textContent=txt;}return c;}
+    tr.appendChild(td(a?a.name:'(sters)'));
+    tr.appendChild(td(fdate(e.data)));
+    tr.appendChild(td(e.start));
+    tr.appendChild(e.end?td(e.end):td('-',true));
+    tr.appendChild(td(dur));
+    var sigTd=document.createElement('td');
+    if(e.sig){
+      var img=document.createElement('img');img.src=e.sig;img.className='sig-thumb';
+      img.addEventListener('click',function(){viewSig(this.src);});
+      sigTd.appendChild(img);
+    } else {
+      var sp2=document.createElement('span');sp2.style.cssText='color:var(--text3);font-size:11px;font-style:italic';
+      sp2.textContent=e.manual?'manual':'-';sigTd.appendChild(sp2);
+    }
+    tr.appendChild(sigTd);
+    tb.appendChild(tr);
+  });
 }
 function expCSV(){
-  var s=lg.slice().sort(function(a,b){return b.data.localeCompare(a.data)});
+  var s=lg.slice().sort(function(a,b){return b.data.localeCompare(a.data)||b.start.localeCompare(a.start)});
   var rows=[['Angajat','Data','Intrare','Iesire','Minute','Semnatura']];
-  s.forEach(function(e){var a=ang.find(function(x){return x.id===e.id});var m=(e.start&&e.end)?Math.max(0,t2m(e.end)-t2m(e.start)):'';rows.push([a?a.name:e.id,e.data,e.start,e.end||'',m,e.sig?'Da':'Nu'])});
+  s.forEach(function(e){var a=ang.find(function(x){return x.id===e.id});var m=(e.start&&e.end)?Math.max(0,t2m(e.end)-t2m(e.start)):'';rows.push([a?a.name:e.id,e.data,e.start,e.end||'',m,e.sig?'Da':(e.manual?'Manual':'Nu')])});
   var csv=rows.map(function(r){return r.join(',')}).join('\n');
   var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='pontaj_'+today()+'.csv';a.click();
 }
@@ -898,7 +978,7 @@ function slugify(str){
 }
 async function expZIP(){
   if(typeof JSZip==='undefined'){toast('Eroare: librarie ZIP indisponibila.');return;}
-  var s=lg.slice().sort(function(a,b){return b.data.localeCompare(a.data)});
+  var s=lg.slice().sort(function(a,b){return b.data.localeCompare(a.data)||b.start.localeCompare(a.start)});
   var zip=new JSZip();
   var rows=[['Angajat','Data','Intrare','Iesire','Minute','Fisier semnatura']];
   var sigFolder=zip.folder('semnaturi');
@@ -915,6 +995,8 @@ async function expZIP(){
       sigFile=base+(n>0?'_'+n:'')+'.png';
       var b64=e.sig.split(',')[1]||'';
       sigFolder.file(sigFile,b64,{base64:true});
+    } else if(e.manual){
+      sigFile='(manual)';
     }
     rows.push([name,e.data,e.start,e.end||'',m,sigFile]);
   });
@@ -973,7 +1055,6 @@ document.getElementById('lfa').addEventListener('change',renderL);
 document.getElementById('lfd').addEventListener('change',renderL);
 document.getElementById('nname').addEventListener('keydown',function(e){if(e.key==='Enter')addA()});
 
-
 updDate(); setInterval(updDate,60000);
 
 // Start Firebase sync after page loaded
@@ -1014,15 +1095,17 @@ window.addEventListener('load', function(){
 });
 
 /* ===== SCROLL WHEEL TIME PICKER ===== */
-var swState={start:{h:null,m:null},end:{h:null,m:null},estart:{h:null,m:null},eend:{h:null,m:null}};
+var swState={start:{h:null,m:null},end:{h:null,m:null},estart:{h:null,m:null},eend:{h:null,m:null},mstart2:{h:null,m:null},mend2:{h:null,m:null}};
 var swOpen=null;
 var ITEM_H=36;
+var MINS=[0,5,10,15,20,25,30,35,40,45,50,55];
+
+function nearestMin(m){return MINS.reduce(function(p,c){return Math.abs(c-m)<Math.abs(p-m)?c:p;});}
 
 function makeDrum(drumId, values, initIdx, onChangeFn){
   var drum=document.getElementById(drumId);
   if(!drum)return;
   drum.innerHTML='';
-  // 2 blank spacers top so first item can center
   for(var p=0;p<2;p++){var sp=document.createElement('div');sp.className='sw-item';drum.appendChild(sp);}
   values.forEach(function(v,i){
     var el=document.createElement('div');
@@ -1039,7 +1122,7 @@ function makeDrum(drumId, values, initIdx, onChangeFn){
     });
     drum.appendChild(el);
   });
-  for(var p=0;p<2;p++){var sp=document.createElement('div');sp.className='sw-item';drum.appendChild(sp);}
+  for(var p2=0;p2<2;p2++){var sp2=document.createElement('div');sp2.className='sw-item';drum.appendChild(sp2);}
   drum._values=values;
   drum._onChange=onChangeFn;
   drum._selIdx=initIdx;
@@ -1067,20 +1150,18 @@ function makeDrum(drumId, values, initIdx, onChangeFn){
     onChangeFn(values[next]);
   },{passive:false});
 
-  var _ty=null,_sy=null,_startY=null;
+  var _ty=null,_sy=null;
   var TOUCH_DAMPING=0.55;
   drum.addEventListener('touchstart',function(e){
     _ty=e.touches[0].clientY;
-    _startY=_ty;
     _sy=drum.scrollTop;
   },{passive:true});
   drum.addEventListener('touchmove',function(e){
     if(_ty===null)return;
     var rawDelta=_ty-e.touches[0].clientY;
-    var damped=rawDelta*TOUCH_DAMPING;
-    drum.scrollTop=_sy+damped;
+    drum.scrollTop=_sy+rawDelta*TOUCH_DAMPING;
   },{passive:true});
-  drum.addEventListener('touchend',function(){_ty=null;_sy=null;_startY=null;},{passive:true});
+  drum.addEventListener('touchend',function(){_ty=null;_sy=null;},{passive:true});
 }
 
 function styleDrum(drum,idx){
@@ -1099,20 +1180,18 @@ function scrollDrumNow(drumId,idx){
 
 function buildWheels(which,h,m){
   var hours=[];for(var i=0;i<24;i++)hours.push(i);
-  var mins=[0,5,10,15,20,25,30,35,40,45,50,55];
   var hIdx=Math.max(0,Math.min(23,h||0));
-  var mIdx=mins.indexOf(m);if(mIdx<0)mIdx=0;
+  var mIdx=MINS.indexOf(m);if(mIdx<0)mIdx=0;
 
   makeDrum('drum-'+which+'-h',hours,hIdx,function(v){
     if(swState[which])swState[which].h=v;
     refreshDisplay(which);
   });
-  makeDrum('drum-'+which+'-m',mins,mIdx,function(v){
+  makeDrum('drum-'+which+'-m',MINS,mIdx,function(v){
     if(swState[which])swState[which].m=v;
     refreshDisplay(which);
   });
-  swState[which]={h:hours[hIdx],m:mins[mIdx]};
-  // store for deferred scroll
+  swState[which]={h:hours[hIdx],m:MINS[mIdx]};
   document.getElementById('drum-'+which+'-h')._initIdx=hIdx;
   document.getElementById('drum-'+which+'-m')._initIdx=mIdx;
   refreshDisplay(which);
@@ -1158,31 +1237,34 @@ function closeDrums(which){
 
 function toggleDrums(which){
   if(swOpen===which){closeDrums(which);return;}
-  if(which==='end'&&swState.end.h===null){
+  if((which==='end'||which==='eend'||which==='mend2')&&swState[which].h===null){
     var now=new Date(),h=now.getHours(),m=Math.floor(now.getMinutes()/5)*5;
     if(m>=60){m=0;h=Math.min(h+1,23);}
-    buildWheels('end',h,m);
-  }
-  if(which==='eend'&&swState.eend.h===null){
-    var now=new Date(),h=now.getHours(),m=Math.floor(now.getMinutes()/5)*5;
-    if(m>=60){m=0;h=Math.min(h+1,23);}
-    buildWheels('eend',h,m);
+    buildWheels(which,h,m);
   }
   openDrums(which);
 }
 
 function resetClocks(){
+  var a=curAngId?ang.find(function(x){return x.id===curAngId}):null;
+  if(swOpen)closeDrums(swOpen);
+  if(a&&a.pstart&&a.pend){
+    var sp=a.pstart.split(':'),ep=a.pend.split(':');
+    buildWheels('start',Number(sp[0]),nearestMin(Number(sp[1])));
+    buildWheels('end',Number(ep[0]),nearestMin(Number(ep[1])));
+    var de0=document.getElementById('drums-end');if(de0)de0.style.display='none';
+    document.getElementById('sw-end-display').classList.remove('open');
+    openDrums('start');
+    return;
+  }
   var now=new Date(),h=now.getHours(),m=Math.floor(now.getMinutes()/5)*5;
   if(m>=60){m=0;h=Math.min(h+1,23);}
-  if(swOpen)closeDrums(swOpen);
   buildWheels('start',h,m);
-  // reset end
   swState.end={h:null,m:null};
   var disp=document.getElementById('sw-end-display');
   if(disp){disp.textContent='--:--';disp.classList.remove('set','open');}
   var inp=document.getElementById('mend');if(inp)inp.value='';
   var de=document.getElementById('drums-end');if(de)de.style.display='none';
-  // open start drums
   openDrums('start');
 }
 
@@ -1191,24 +1273,22 @@ document.addEventListener('click',function(e){
   var wrap=document.getElementById('sw-'+swOpen);
   if(wrap&&!wrap.contains(e.target))closeDrums(swOpen);
 });
-;
 
 /* ===== EDIT ENTRY (admin) ===== */
 var editingUid=null;
-function openEditEntry(uid){
-  var e=lg.find(function(x){return x.uid===uid});
+function openEditEntry(u){
+  var e=lg.find(function(x){return x.uid===u});
   if(!e)return;
-  editingUid=uid;
+  editingUid=u;
   var a=ang.find(function(x){return x.id===e.id});
-  document.getElementById('editModalName').textContent=(a?a.name:'Angajat')+' — '+fdate(e.data);
+  document.getElementById('editModalName').textContent=(a?a.name:'Angajat')+' \u2014 '+fdate(e.data);
   setEdate(e.data);
   document.getElementById('editErr').textContent='';
   if(swOpen)closeDrums(swOpen);
   var sh=0,sm=0,eh=null,em2=null;
   if(e.start){var sp=e.start.split(':');sh=Number(sp[0]);sm=Number(sp[1]);}
   if(e.end){var ep=e.end.split(':');eh=Number(ep[0]);em2=Number(ep[1]);}
-  var mins=[0,5,10,15,20,25,30,35,40,45,50,55];
-  sm=mins.reduce(function(p,c){return Math.abs(c-sm)<Math.abs(p-sm)?c:p;});
+  sm=nearestMin(sm);
   document.getElementById('editModal').classList.add('open');
   requestAnimationFrame(function(){
     buildWheels('estart',sh,sm);
@@ -1217,8 +1297,7 @@ function openEditEntry(uid){
     swOpen='estart';
     requestAnimationFrame(function(){applyScrolls('estart');});
     if(eh!==null){
-      em2=mins.reduce(function(p,c){return Math.abs(c-em2)<Math.abs(p-em2)?c:p;});
-      buildWheels('eend',eh,em2);
+      buildWheels('eend',eh,nearestMin(em2));
     } else {
       swState['eend']={h:null,m:null};
       document.getElementById('sw-eend-display').textContent='--:--';
@@ -1244,9 +1323,13 @@ function saveEditEntry(){
   err.textContent='';
   var idx=lg.findIndex(function(x){return x.uid===editingUid});
   if(idx<0)return;
+  // check for a different entry on the same employee+date
+  var clash=lg.some(function(x){return x.uid!==editingUid&&x.id===lg[idx].id&&x.data===date;});
+  if(clash){err.textContent='Exista deja o inregistrare in ziua aceea.';return;}
   lg[idx].start=start;
   lg[idx].end=end||null;
   lg[idx].data=date;
+  lg[idx].ts=dateToTs(date,start);
   sv();
   renderL();renderP();
   toast('Tura modificata.');
@@ -1272,25 +1355,76 @@ function edateShift(delta){
   setEdate(iso);
 }
 
-/* RO date pickers (admin) */
-var RO_M=['ian','feb','mar','apr','mai','iun','iul','aug','sep','oct','nov','dec'];
-function roDateSet(id, isoStr){
-  document.getElementById(id).value = isoStr;
-  if(!isoStr){document.getElementById('rddisp-'+id).textContent='';return;}
-  var p=isoStr.split('-');
-  document.getElementById('rddisp-'+id).textContent=Number(p[2])+' '+RO_M[Number(p[1])-1]+' '+p[0];
+/* ===== ADAUGARE MANUALA (admin) ===== */
+function dateToTs(date,start){
+  var dp=date.split('-'),tp=(start||'00:00').split(':');
+  return new Date(Number(dp[0]),Number(dp[1])-1,Number(dp[2]),Number(tp[0]),Number(tp[1])).getTime();
 }
-function roDateShift(id, delta){
-  var cur=document.getElementById(id).value;
-  var d=cur?new Date(cur+'T00:00:00'):new Date();
+function openManualEntry(){
+  if(ang.length===0){toast('Adauga intai un angajat.');return;}
+  var sel=document.getElementById('mangSel');
+  sel.innerHTML=ang.map(function(a){return '<option value="'+a.id+'">'+a.name+'</option>'}).join('');
+  var pre=document.getElementById('lfa').value;
+  if(pre)sel.value=pre;
+  var d=document.getElementById('lfd').value||today();
+  setMdate(d);
+  document.getElementById('manErr').textContent='';
+  if(swOpen)closeDrums(swOpen);
+  document.getElementById('manualModal').classList.add('open');
+  requestAnimationFrame(function(){applyManualPreset();});
+  sel.onchange=applyManualPreset;
+}
+function applyManualPreset(){
+  var a=ang.find(function(x){return x.id===document.getElementById('mangSel').value});
+  var sh=16,sm=0,eh=22,em=0;
+  if(a&&a.pstart&&a.pend){
+    var sp=a.pstart.split(':'),ep=a.pend.split(':');
+    sh=Number(sp[0]);eh=Number(ep[0]);
+    sm=nearestMin(Number(sp[1]));em=nearestMin(Number(ep[1]));
+  }
+  buildWheels('mstart2',sh,sm);
+  buildWheels('mend2',eh,em);
+  document.getElementById('drums-mstart2').style.display='none';
+  document.getElementById('drums-mend2').style.display='none';
+  document.getElementById('sw-mstart2-display').classList.remove('open');
+  document.getElementById('sw-mend2-display').classList.remove('open');
+  swOpen=null;
+}
+function setMdate(iso){
+  document.getElementById('mdate').value=iso;
+  var p=iso.split('-');
+  var d=new Date(Number(p[0]),Number(p[1])-1,Number(p[2]));
+  document.getElementById('mdate-display').textContent=DAYS[d.getDay()]+', '+Number(p[2])+' '+MONTHS[Number(p[1])-1]+' '+p[0];
+}
+function mdateShift(delta){
+  var cur=document.getElementById('mdate').value;
+  if(!cur)return;
+  var p=cur.split('-');
+  var d=new Date(Number(p[0]),Number(p[1])-1,Number(p[2]));
   d.setDate(d.getDate()+delta);
-  var iso=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  roDateSet(id, iso);
-  if(id==='lfd') renderL();
+  setMdate(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));
 }
-function roDateClear(id){
-  roDateSet(id,'');
-  if(id==='lfd') renderL();
+function closeManualModal(ev){if(ev.target===document.getElementById('manualModal'))closeManualDirect();}
+function closeManualDirect(){
+  if(swOpen&&(swOpen==='mstart2'||swOpen==='mend2'))closeDrums(swOpen);
+  document.getElementById('manualModal').classList.remove('open');
+}
+function saveManualEntry(){
+  var id=document.getElementById('mangSel').value;
+  var date=document.getElementById('mdate').value;
+  var start=document.getElementById('mstart2').value;
+  var end=document.getElementById('mend2').value;
+  var err=document.getElementById('manErr');
+  if(!id){err.textContent='Selecteaza angajatul.';return;}
+  if(!start||!end){err.textContent='Selecteaza ambele ore.';return;}
+  if(t2m(end)<=t2m(start)){err.textContent='Ora de iesire trebuie sa fie dupa intrare.';return;}
+  if(entriesForAng(id,date).length>0){err.textContent='Exista deja o inregistrare pentru ziua aceasta.';return;}
+  err.textContent='';
+  lg.push({uid:uid(),id:id,data:date,start:start,end:end,ts:dateToTs(date,start),sig:null,manual:true});
+  sv();renderL();renderP();
+  var a=ang.find(function(x){return x.id===id});
+  toast('Adaugat: '+a.name+' '+fdate(date)+' '+start+'-'+end);
+  closeManualDirect();
 }
 
 /* ===== CUSTOM DATE PICKER ===== */
@@ -1307,11 +1441,9 @@ function openCDP(targetId, triggerEl){
   renderCDP();
   var popup=document.getElementById('cdp-popup');
   popup.style.display='block';
-  // position below trigger
   var rect=triggerEl.getBoundingClientRect();
   var top=rect.bottom+window.scrollY+4;
   var left=rect.left+window.scrollX;
-  // keep in viewport
   if(left+270>window.innerWidth) left=window.innerWidth-274;
   popup.style.top=top+'px'; popup.style.left=left+'px';
 }
@@ -1321,16 +1453,14 @@ function renderCDP(){
   document.getElementById('cdp-month-label').textContent=RO_MONTHS[m]+' '+y;
   var grid=document.getElementById('cdp-grid');
   grid.innerHTML='';
-  // day headers Mon-Sun
   RO_DAYS.forEach(function(d){
     var el=document.createElement('div');el.className='cdp-dow';el.textContent=d;grid.appendChild(el);
   });
-  var first=new Date(y,m,1).getDay(); // 0=Sun
-  first=(first+6)%7; // shift so Mon=0
+  var first=new Date(y,m,1).getDay();
+  first=(first+6)%7;
   var days=new Date(y,m+1,0).getDate();
   var todayStr=today();
   var selStr=document.getElementById(CDP.target).value;
-  // blank cells before first day
   for(var i=0;i<first;i++){var bl=document.createElement('div');bl.className='cdp-day other';grid.appendChild(bl);}
   for(var d=1;d<=days;d++){
     var iso=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
@@ -1383,19 +1513,15 @@ var URL_KEY=getParam('k');
 
 function checkAccess(){
   if(!URL_ANG_ID&&!URL_KEY) return true;
-  // Key in URL is sufficient auth - no localStorage lookup needed
-  // (localStorage may be empty on other devices)
   if(URL_ANG_ID&&URL_KEY&&URL_KEY.length>=6) return true;
   return false;
 }
 
 function initApp(){
-  // No params = go to PIN/admin only, never show employee list publicly
   if(!URL_ANG_ID&&!URL_KEY){
     showPin();
     return;
   }
-  // Has params but invalid key
   if(!checkAccess()){
     document.getElementById('va').style.display='none';
     document.getElementById('vp').style.display='none';
@@ -1404,14 +1530,12 @@ function initApp(){
     body.innerHTML='<div style="text-align:center;padding:4rem 1rem"><div style="font-family:Playfair Display,serif;font-size:22px;color:var(--danger);margin-bottom:1rem">Acces interzis</div><div style="color:var(--text2);font-size:15px">Link invalid. Foloseste tag-ul NFC personal.</div></div>';
     return;
   }
-  // Valid employee URL - use URL params directly, no Firebase lookup needed
   var urlName=getParam('n')||'Angajat';
   var a=ang.find(function(x){return x.id===URL_ANG_ID});
   if(!a){
     a={id:URL_ANG_ID,name:decodeURIComponent(urlName),key:URL_KEY};
     ang.push(a);
     localStorage.setItem(SKA,JSON.stringify(ang));
-    // sync to Firebase without overwriting other employees
     if(window.fbdb) window.fbdb.ref('pontaj/angajati').set(ang);
   }
   showAngajatSingle(a.id);
@@ -1422,10 +1546,10 @@ function showAngajatSingle(angId){
   document.getElementById('va').style.display='';
   document.getElementById('vp').style.display='none';
   document.getElementById('vadmin').style.display='none';
-  document.getElementById('admin-badge').style.display='none';
+  document.getElementById('abadge').style.display='none';
   document.getElementById('blogt').style.display='none';
   document.getElementById('alinkw').style.display='none';
-  // Render only this employee
+  isAdm=false;
   var g=document.getElementById('agrid');
   g.innerHTML='';
   var a=ang.find(function(x){return x.id===angId});
@@ -1436,7 +1560,7 @@ function showAngajatSingle(angId){
   if(hasEntry){
     var e0=entries[0];
     var dur=(e0.start&&e0.end)?fmin(t2m(e0.end)-t2m(e0.start)):null;
-    st=e0.start+' — '+e0.end+(dur?' ('+dur+')':'');
+    st=e0.start+' \u2014 '+e0.end+(dur?' ('+dur+')':'');
     stClass='done';
   } else {st='Apasa pentru a inregistra tura';stClass='';}
   var card=document.createElement('div');
